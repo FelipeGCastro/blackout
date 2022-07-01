@@ -1,5 +1,5 @@
 import { createContactFactory } from './factories';
-import { postUserContact } from '@farfetch/blackout-client/users';
+import { postUserContact } from '@farfetch/blackout-client';
 
 /**
  * Creates a user contact.

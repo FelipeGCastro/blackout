@@ -15,7 +15,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postLogout: PostLogout) =>
+const logoutFactory =
+  (postLogout: PostLogout) =>
   (config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -38,3 +39,5 @@ export default (postLogout: PostLogout) =>
       throw error;
     }
   };
+
+export default logoutFactory;

@@ -1,4 +1,4 @@
-import { putUserAttribute } from '@farfetch/blackout-client/users';
+import { putUserAttribute } from '@farfetch/blackout-client';
 import { setUserAttributeFactory } from './factories';
 
 /**

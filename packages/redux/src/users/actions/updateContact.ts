@@ -1,4 +1,4 @@
-import { patchUserContact } from '@farfetch/blackout-client/users';
+import { patchUserContact } from '@farfetch/blackout-client';
 import { updateContactFactory } from './factories';
 
 /**

@@ -1,4 +1,3 @@
-export * from './userAddress.types';
 export * from './deleteUserAddress.types';
 export * from './deleteUserDefaultContactAddress.types';
 export * from './getDefaultContactAddress.types';

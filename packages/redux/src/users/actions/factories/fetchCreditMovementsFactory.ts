@@ -1,8 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserCreditMovements,
+  GetUserCreditMovementsQuery,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
-import type { GetUserCreditMovements } from '@farfetch/blackout-client/users/credits/types';
-import type { GetUserCreditMovementsQuery } from '@farfetch/blackout-client/users/types';
 /**
  * @param id     - User identifier.
  * @param query  - Query parameters.
@@ -14,12 +17,12 @@ import type { GetUserCreditMovementsQuery } from '@farfetch/blackout-client/user
 /**
  * Create get user credit movements.
  *
- * @param getCreditMovements - Get credit movements client.
+ * @param getUserCreditMovements - Get user credit movements client.
  *
  * @returns Thunk factory.
  */
 const fetchCreditMovementsFactory =
-  (getCreditMovements: GetUserCreditMovements) =>
+  (getUserCreditMovements: GetUserCreditMovements) =>
   (id: string, query: GetUserCreditMovementsQuery, config?: Config) =>
   async (dispatch: Dispatch) => {
     try {
@@ -27,7 +30,7 @@ const fetchCreditMovementsFactory =
         type: actionTypes.FETCH_CREDIT_MOVEMENTS_REQUEST,
       });
 
-      const result = await getCreditMovements(id, query, config);
+      const result = await getUserCreditMovements(id, query, config);
 
       dispatch({
         payload: { creditMovements: result },

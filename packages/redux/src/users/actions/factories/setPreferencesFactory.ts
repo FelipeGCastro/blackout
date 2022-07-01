@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  PutUserPreferences,
+  PutUserPreferencesData,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import userPreferencesSchema from '../../../entities/schemas/preference';
 import type { Dispatch } from 'redux';
-import type {
-  SetUserPreferences,
-  SetUserPreferencesData,
-} from '@farfetch/blackout-client/users/preferences/types';
 
 /**
  * @param userId - User's id to be filtered for.
@@ -19,20 +20,20 @@ import type {
 /**
  * Updates the user preferences.
  *
- * @param updatePreferences - Update preferences client.
+ * @param putUserPreferences - Put user preferences client.
  *
  * @returns Thunk factory.
  */
 const setPreferencesFactory =
-  (updatePreferences: SetUserPreferences) =>
-  (userId: number, data: SetUserPreferencesData, config?: Config) =>
+  (putUserPreferences: PutUserPreferences) =>
+  (userId: number, data: PutUserPreferencesData, config?: Config) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({
         type: actionTypes.UPDATE_PREFERENCES_REQUEST,
       });
 
-      const result = await updatePreferences(userId, data, config);
+      const result = await putUserPreferences(userId, data, config);
 
       dispatch({
         type: actionTypes.UPDATE_PREFERENCES_SUCCESS,

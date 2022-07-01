@@ -1,8 +1,7 @@
 import { fetchAddressesFactory } from './factories';
-import { getAddresses } from '@farfetch/blackout-client/addresses';
+import { getUserAddresses } from '@farfetch/blackout-client';
 
 /**
  * Responsible for getting all the addresses of the current user.
  */
-
-export default fetchAddressesFactory(getAddresses);
+export default fetchAddressesFactory(getUserAddresses);

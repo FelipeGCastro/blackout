@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   PostPhoneTokens,
   PostPhoneTokensData,
-} from '@farfetch/blackout-client/users/types';
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * @param data   - User to be registered.
@@ -23,7 +24,7 @@ import type {
 
 const createPhoneToken =
   (postPhoneToken: PostPhoneTokens) =>
-  (data: PostPhoneTokensData, config?: Record<string, unknown>) =>
+  (data: PostPhoneTokensData, config?: Config) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({

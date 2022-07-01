@@ -1,11 +1,10 @@
 import * as actionTypes from '../actionTypes';
 import { AnyAction, combineReducers } from 'redux';
-import { createMergedObject } from '../../helpers';
+import createMergedObject from '../../helpers/createMergedObject';
 import type {
   FetchProductMeasurementsAction,
   FetchProductMeasurementsFailureAction,
   FetchProductMeasurementsRequestAction,
-  FetchProductMeasurementsSuccessAction,
   ProductsMeasurementsState,
 } from '../types';
 import type { StoreState } from '../../types';
@@ -69,14 +68,12 @@ export const entitiesMapper = {
   [actionTypes.FETCH_PRODUCT_MEASUREMENTS_SUCCESS as typeof actionTypes.FETCH_PRODUCT_MEASUREMENTS_SUCCESS]:
     (
       state: StoreState['entities'],
-      {
-        meta: { productId },
-        payload: { entities },
-      }: {
-        meta: FetchProductMeasurementsSuccessAction['meta'];
-        payload: FetchProductMeasurementsSuccessAction['payload'];
-      },
+      { meta: { productId }, payload: { entities } }: AnyAction,
     ): StoreState['entities'] => {
+      if (!state) {
+        return state;
+      }
+
       const newMeasurements = entities.products[productId]?.measurements;
       const newState = createMergedObject(state, entities);
 

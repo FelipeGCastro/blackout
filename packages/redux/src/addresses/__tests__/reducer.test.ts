@@ -1,6 +1,7 @@
+import * as actionTypes from '../actionTypes';
 import * as fromReducer from '../reducer';
 import { LOGOUT_SUCCESS } from '../../authentication/actionTypes';
-import reducer, { actionTypes, entitiesMapper } from '..';
+import reducer, { entitiesMapper } from '../reducer';
 let initialState;
 const randomAction = { type: 'this_is_a_random_action' };
 
@@ -641,19 +642,22 @@ describe('Addresses reducers', () => {
         },
       };
 
-      it('should handle FETCH_ADDRESS_SCHEMA_SUCCESS action type', () => {
+      it('should handle FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS action type', () => {
         expect(
-          entitiesMapper[actionTypes.FETCH_ADDRESS_SCHEMA_SUCCESS](state, {
-            payload: {
-              result: countryId,
-              entities: {
-                addressSchema: {
-                  ...newAddressSchema,
+          entitiesMapper[actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS](
+            state,
+            {
+              payload: {
+                result: countryId,
+                entities: {
+                  addressSchema: {
+                    ...newAddressSchema,
+                  },
                 },
               },
+              type: actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS,
             },
-            type: actionTypes.FETCH_ADDRESS_SCHEMA_SUCCESS,
-          }),
+          ),
         ).toEqual(expectedResult);
       });
     });

@@ -1,5 +1,5 @@
 import { fetchTitlesFactory } from './factories';
-import { getTitles } from '@farfetch/blackout-client/users';
+import { getTitles } from '@farfetch/blackout-client';
 
 /**
  * Fetch a list of titles.

@@ -13,6 +13,6 @@ export { default as refreshToken } from './refreshToken';
 export { default as register } from './register';
 export { default as removeUserImpersonation } from './removeUserImpersonation';
 export { default as removeUserToken } from './removeUserToken';
-export { default as reset } from './reset';
+export { default as resetAuthentication } from './resetAuthentication';
 export { default as resetPassword } from './resetPassword';
 export { default as validateEmail } from './validateEmail';

@@ -1,11 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetCountryCities,
+  GetCountryCitiesResponse,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import state from '../../../entities/schemas/state';
-import type {
-  Cities,
-  GetCountryCities,
-} from '@farfetch/blackout-client/locale/types';
 import type { Dispatch } from 'redux';
 
 /**
@@ -26,7 +27,7 @@ import type { Dispatch } from 'redux';
 const fetchCountryCitiesFactory =
   (getCountryCities: GetCountryCities) =>
   (countryCode: string, stateId: number, config?: Config) =>
-  async (dispatch: Dispatch): Promise<Cities> => {
+  async (dispatch: Dispatch): Promise<GetCountryCitiesResponse> => {
     try {
       dispatch({
         meta: {

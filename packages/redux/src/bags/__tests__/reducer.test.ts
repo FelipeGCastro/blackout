@@ -1,4 +1,4 @@
-import * as fromReducer from '../reducer';
+import * as actionTypes from '../actionTypes';
 import { LOGOUT_SUCCESS } from '../../authentication/actionTypes';
 import {
   mockBagId,
@@ -6,7 +6,7 @@ import {
   mockError,
   mockState,
 } from 'tests/__fixtures__/bags';
-import reducer, { actionTypes } from '..';
+import reducer, * as fromReducer from '../reducer';
 
 let initialState;
 const randomAction = { type: 'this_is_a_random_action' };

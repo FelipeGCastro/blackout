@@ -10,6 +10,6 @@ Object {
     "idNumber": "string",
     "name": "string",
   },
-  "type": "@farfetch/blackout-client/CREATE_PERSONAL_IDS_SUCCESS",
+  "type": "@farfetch/blackout-redux/CREATE_PERSONAL_IDS_SUCCESS",
 }
 `;

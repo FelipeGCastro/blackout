@@ -1,5 +1,5 @@
 import { fetchDefaultPersonalIdFactory } from './factories';
-import { getUserDefaultPersonalId } from '@farfetch/blackout-client/users';
+import { getUserDefaultPersonalId } from '@farfetch/blackout-client';
 
 /**
  * Fetch default personal id.

@@ -6,3 +6,5 @@ export * from './patchUserPersonalId';
 export * from './postUserPersonalIdImage';
 export * from './postUserPersonalIds';
 export * from './putUserDefaultPersonalId';
+
+export * from './types';

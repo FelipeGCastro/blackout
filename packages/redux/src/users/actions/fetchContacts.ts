@@ -1,5 +1,5 @@
 import { fetchContactsFactory } from './factories';
-import { getUserContacts } from '@farfetch/blackout-client/users';
+import { getUserContacts } from '@farfetch/blackout-client';
 
 /**
  * Fetch all the contacts from user.

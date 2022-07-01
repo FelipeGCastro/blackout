@@ -1,11 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import { normalize } from 'normalizr';
-import country from '../../../entities/schemas/country';
-import type {
+import {
+  Config,
   Country,
   GetCountry,
-} from '@farfetch/blackout-client/locale/types';
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import { normalize } from 'normalizr';
+import country from '../../../entities/schemas/country';
 import type { Dispatch } from 'redux';
 
 /**

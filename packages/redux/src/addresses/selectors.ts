@@ -10,14 +10,9 @@ import {
   getResult as Result,
 } from './reducer';
 import { getEntities, getEntityById } from '../entities/selectors/entity';
-import type {
-  AddressEntity,
-  AddressesEntity,
-  AddressSchemaEntity,
-  SchemaEntity,
-} from '../entities/types';
+import type { AddressEntity, AddressesEntity } from '../entities/types';
+import type { AddressesState } from './types';
 import type { BlackoutError } from '@farfetch/blackout-client';
-import type { State } from './types';
 import type { StoreState } from '../types';
 
 /**
@@ -27,8 +22,10 @@ import type { StoreState } from '../types';
  *
  * @returns Array containing the loaded addresses id.
  */
-export const getResult = (state: StoreState): State['result'] =>
-  Result(state.addresses);
+export const getAddressesResult = (
+  state: StoreState,
+): AddressesState['result'] =>
+  Result(state.addresses as NonNullable<AddressesState>);
 
 /**
  * Returns the error of the addresses area.
@@ -37,8 +34,8 @@ export const getResult = (state: StoreState): State['result'] =>
  *
  * @returns Address information object.
  */
-export const getError = (state: StoreState): State['error'] =>
-  errorGetter(state.addresses);
+export const getAddressesError = (state: StoreState): AddressesState['error'] =>
+  errorGetter(state.addresses as NonNullable<AddressesState>);
 
 /**
  * Returns the loading status of the addresses area.
@@ -47,8 +44,10 @@ export const getError = (state: StoreState): State['error'] =>
  *
  * @returns Loader status.
  */
-export const isAddressesLoading = (state: StoreState): State['isLoading'] =>
-  getIsLoading(state.addresses);
+export const areAddressesLoading = (
+  state: StoreState,
+): AddressesState['isLoading'] =>
+  getIsLoading(state.addresses as NonNullable<AddressesState>);
 
 /**
  * Returns the addresses entity that contains all user addresses.
@@ -80,7 +79,7 @@ export const getAddress = (
  *
  * @returns - Schemas with the correspondent Iso code.
  */
-export const getSchemas = (state: StoreState): AddressSchemaEntity =>
+export const getSchemas = (state: StoreState) =>
   getEntities(state, 'addressSchema');
 
 /**
@@ -91,10 +90,8 @@ export const getSchemas = (state: StoreState): AddressSchemaEntity =>
  *
  * @returns Schema information object.
  */
-export const getSchema = (
-  state: StoreState,
-  isoCode: string,
-): SchemaEntity | undefined => getEntityById(state, 'addressSchema', isoCode);
+export const getAddressSchema = (state: StoreState, isoCode: string) =>
+  getEntityById(state, 'addressSchema', isoCode);
 
 /**
  * Returns the error or loading status of each sub-area.
@@ -107,7 +104,8 @@ export const getSchema = (
  */
 export const getPredictions = (
   state: StoreState,
-): State['predictions']['result'] => predictionsGetter(state.addresses).result;
+): AddressesState['predictions']['result'] =>
+  predictionsGetter(state.addresses as NonNullable<AddressesState>).result;
 
 /**
  * @param state - Application state.
@@ -116,17 +114,18 @@ export const getPredictions = (
  */
 export const getPredictionsError = (
   state: StoreState,
-): State['predictions']['error'] => predictionsGetter(state.addresses).error;
+): AddressesState['predictions']['error'] =>
+  predictionsGetter(state.addresses as NonNullable<AddressesState>).error;
 
 /**
  * @param state - Application state.
  *
  * @returns Loader status.
  */
-export const isPredictionsLoading = (
+export const arePredictionsLoading = (
   state: StoreState,
-): State['predictions']['isLoading'] =>
-  predictionsGetter(state.addresses).isLoading;
+): AddressesState['predictions']['isLoading'] =>
+  predictionsGetter(state.addresses as NonNullable<AddressesState>).isLoading;
 
 /**
  * @param state - Application state.
@@ -135,8 +134,9 @@ export const isPredictionsLoading = (
  */
 export const getPredictionDetails = (
   state: StoreState,
-): State['predictionDetails']['result'] =>
-  predictionsDetailsGetter(state.addresses).result;
+): AddressesState['predictionDetails']['result'] =>
+  predictionsDetailsGetter(state.addresses as NonNullable<AddressesState>)
+    .result;
 
 /**
  * @param state - Application state.
@@ -145,18 +145,20 @@ export const getPredictionDetails = (
  */
 export const getPredictionDetailsError = (
   state: StoreState,
-): State['predictionDetails']['error'] =>
-  predictionsDetailsGetter(state.addresses).error;
+): AddressesState['predictionDetails']['error'] =>
+  predictionsDetailsGetter(state.addresses as NonNullable<AddressesState>)
+    .error;
 
 /**
  * @param state - Application state.
  *
  * @returns Loader status.
  */
-export const isPredictionDetailsLoading = (
+export const arePredictionDetailsLoading = (
   state: StoreState,
-): State['predictionDetails']['isLoading'] =>
-  predictionsDetailsGetter(state.addresses).isLoading;
+): AddressesState['predictionDetails']['isLoading'] =>
+  predictionsDetailsGetter(state.addresses as NonNullable<AddressesState>)
+    .isLoading;
 
 /**
  * @param state - Application state.
@@ -165,8 +167,8 @@ export const isPredictionDetailsLoading = (
  */
 export const isAddressesListLoading = (
   state: StoreState,
-): State['addresses']['isLoading'] =>
-  addressesGetter(state.addresses).isLoading;
+): AddressesState['addresses']['isLoading'] =>
+  addressesGetter(state.addresses as NonNullable<AddressesState>).isLoading;
 
 /**
  * @param state - Application state.
@@ -175,7 +177,8 @@ export const isAddressesListLoading = (
  */
 export const getAddressesListError = (
   state: StoreState,
-): State['addresses']['error'] => addressesGetter(state.addresses).error;
+): AddressesState['addresses']['error'] =>
+  addressesGetter(state.addresses as NonNullable<AddressesState>).error;
 
 /**
  * @param state     - Application state.
@@ -186,7 +189,10 @@ export const getAddressesListError = (
 export const isAddressLoading = (
   state: StoreState,
   addressId: AddressEntity['id'],
-): boolean | undefined => addressGetter(state.addresses).isLoading[addressId];
+): boolean | undefined =>
+  addressGetter(state.addresses as NonNullable<AddressesState>).isLoading[
+    addressId
+  ];
 
 /**
  * @param state     - Application state.
@@ -198,7 +204,9 @@ export const getAddressError = (
   state: StoreState,
   addressId: AddressEntity['id'],
 ): BlackoutError | null | undefined =>
-  addressGetter(state.addresses).error[addressId];
+  addressGetter(state.addresses as NonNullable<AddressesState>).error[
+    addressId
+  ];
 
 /**
  * @param state - Application state.
@@ -207,8 +215,8 @@ export const getAddressError = (
  */
 export const isAddressSchemaLoading = (
   state: StoreState,
-): State['addressSchema']['isLoading'] =>
-  addressSchemaGetter(state.addresses).isLoading;
+): AddressesState['addressSchema']['isLoading'] =>
+  addressSchemaGetter(state.addresses as NonNullable<AddressesState>).isLoading;
 
 /**
  * @param state - Application state.
@@ -217,8 +225,8 @@ export const isAddressSchemaLoading = (
  */
 export const getAddressSchemaError = (
   state: StoreState,
-): State['addressSchema']['error'] =>
-  addressSchemaGetter(state.addresses).error;
+): AddressesState['addressSchema']['error'] =>
+  addressSchemaGetter(state.addresses as NonNullable<AddressesState>).error;
 
 /**
  * @param state - Application state.
@@ -227,8 +235,9 @@ export const getAddressSchemaError = (
  */
 export const isDefaultAddressDetailsLoading = (
   state: StoreState,
-): State['defaultAddressDetails']['isLoading'] =>
-  getDefaultAddressDetails(state.addresses).isLoading;
+): AddressesState['defaultAddressDetails']['isLoading'] =>
+  getDefaultAddressDetails(state.addresses as NonNullable<AddressesState>)
+    .isLoading;
 
 /**
  * @param state - Application state.
@@ -237,8 +246,9 @@ export const isDefaultAddressDetailsLoading = (
  */
 export const getDefaultAddressDetailsError = (
   state: StoreState,
-): State['defaultAddressDetails']['error'] =>
-  getDefaultAddressDetails(state.addresses).error;
+): AddressesState['defaultAddressDetails']['error'] =>
+  getDefaultAddressDetails(state.addresses as NonNullable<AddressesState>)
+    .error;
 
 /**
  * @param state - Application state.
@@ -247,5 +257,6 @@ export const getDefaultAddressDetailsError = (
  */
 export const getDefaultAddressDetailsResult = (
   state: StoreState,
-): State['defaultAddressDetails']['result'] =>
-  getDefaultAddressDetails(state.addresses).result;
+): AddressesState['defaultAddressDetails']['result'] =>
+  getDefaultAddressDetails(state.addresses as NonNullable<AddressesState>)
+    .result;

@@ -1,17 +1,17 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import {
   addressId2,
   mockUpdateAddressResponse,
 } from 'tests/__fixtures__/addresses';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { putDefaultContactAddress } from '@farfetch/blackout-client/addresses';
+import { putUserDefaultContactAddress } from '@farfetch/blackout-client';
 import { setDefaultContactAddress } from '..';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  putDefaultContactAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  putUserDefaultContactAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -31,15 +31,15 @@ describe('setDefaultContactAddress() action creator', () => {
   it('should create the correct actions for when the set contact address procedure fails', async () => {
     const expectedError = new Error('set default contact address error');
 
-    putDefaultContactAddress.mockRejectedValueOnce(expectedError);
+    putUserDefaultContactAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(setDefaultContactAddress(userId, addressId2));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(putDefaultContactAddress).toHaveBeenCalledTimes(1);
-      expect(putDefaultContactAddress).toHaveBeenCalledWith(
+      expect(putUserDefaultContactAddress).toHaveBeenCalledTimes(1);
+      expect(putUserDefaultContactAddress).toHaveBeenCalledWith(
         userId,
         addressId2,
         expectedConfig,
@@ -61,14 +61,16 @@ describe('setDefaultContactAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the set contact address procedure is successful', async () => {
-    putDefaultContactAddress.mockResolvedValueOnce(mockUpdateAddressResponse);
+    putUserDefaultContactAddress.mockResolvedValueOnce(
+      mockUpdateAddressResponse,
+    );
     await store.dispatch(setDefaultContactAddress(userId, addressId2));
 
     const actionResults = store.getActions();
 
     expect.assertions(4);
-    expect(putDefaultContactAddress).toHaveBeenCalledTimes(1);
-    expect(putDefaultContactAddress).toHaveBeenCalledWith(
+    expect(putUserDefaultContactAddress).toHaveBeenCalledTimes(1);
+    expect(putUserDefaultContactAddress).toHaveBeenCalledWith(
       userId,
       addressId2,
       expectedConfig,
@@ -85,6 +87,6 @@ describe('setDefaultContactAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.SET_DEFAULT_CONTACT_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('set default contact address success payload');
+    ).toMatchSnapshot('set user default contact address success payload');
   });
 });

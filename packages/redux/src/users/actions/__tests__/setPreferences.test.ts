@@ -1,13 +1,15 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { putUserPreferences } from '@farfetch/blackout-client/users';
+import {
+  putUserPreferences,
+  PutUserPreferencesData,
+} from '@farfetch/blackout-client';
 import { setPreferences } from '..';
 import find from 'lodash/find';
-import type { SetUserPreferencesData } from '@farfetch/blackout-client/users/preferences/types';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   putUserPreferences: jest.fn(),
 }));
 
@@ -37,7 +39,7 @@ describe('updatePreferences action creator', () => {
 
     try {
       await store.dispatch(
-        setPreferences(userId, {} as SetUserPreferencesData, expectedConfig),
+        setPreferences(userId, {} as PutUserPreferencesData, expectedConfig),
       );
     } catch (error) {
       expect(error).toBe(expectedError);

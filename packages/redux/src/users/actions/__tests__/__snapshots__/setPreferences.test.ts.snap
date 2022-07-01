@@ -18,6 +18,6 @@ Object {
       "FFA",
     ],
   },
-  "type": "@farfetch/blackout-client/UPDATE_PREFERENCES_SUCCESS",
+  "type": "@farfetch/blackout-redux/UPDATE_PREFERENCES_SUCCESS",
 }
 `;

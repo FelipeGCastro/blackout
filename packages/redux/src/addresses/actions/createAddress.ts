@@ -1,8 +1,8 @@
 import { createAddressFactory } from './factories';
-import { postAddress } from '@farfetch/blackout-client/addresses';
+import { postUserAddress } from '@farfetch/blackout-client';
 
 /**
  * Responsible for creating an address for the current user.
  */
 
-export default createAddressFactory(postAddress);
+export default createAddressFactory(postUserAddress);

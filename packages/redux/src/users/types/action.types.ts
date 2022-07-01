@@ -1,11 +1,11 @@
 import type * as actionTypes from '../actionTypes';
 import type { Action } from 'redux';
-import type { BlackoutError } from '@farfetch/blackout-client';
-import type { LOGOUT_SUCCESS } from '../../authentication/actionTypes';
 import type {
-  PersonalIdsResponse,
+  BlackoutError,
   UserAttributesResponse,
-} from '@farfetch/blackout-client/users/types';
+  UserPersonalIdResponse,
+} from '@farfetch/blackout-client';
+import type { LOGOUT_SUCCESS } from '../../authentication/actionTypes';
 
 export type ActionType =
   | LogoutAction
@@ -258,7 +258,7 @@ export interface FetchPersonalIdsRequestAction extends Action {
 }
 
 export interface FetchPersonalIdsSuccessAction extends Action {
-  payload: PersonalIdsResponse;
+  payload: UserPersonalIdResponse;
   type: typeof actionTypes.FETCH_PERSONAL_IDS_SUCCESS;
 }
 
@@ -280,7 +280,7 @@ export interface CreatePersonalIdsRequestAction extends Action {
 }
 
 export interface CreatePersonalIdsSuccessAction extends Action {
-  payload: PersonalIdsResponse;
+  payload: UserPersonalIdResponse;
   type: typeof actionTypes.CREATE_PERSONAL_IDS_SUCCESS;
 }
 
@@ -302,7 +302,7 @@ export interface FetchDefaultPersonalIdRequestAction extends Action {
 }
 
 export interface FetchDefaultPersonalIdSuccessAction extends Action {
-  payload: PersonalIdsResponse;
+  payload: UserPersonalIdResponse;
   type: typeof actionTypes.FETCH_DEFAULT_PERSONAL_ID_SUCCESS;
 }
 

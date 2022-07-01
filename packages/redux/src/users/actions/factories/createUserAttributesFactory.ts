@@ -1,11 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   PostUserAttributes,
+  toBlackoutError,
   UserAttributesData,
   UserAttributesResponse,
-} from '@farfetch/blackout-client/users/attributes/types';
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * @param userId - User id.
@@ -24,11 +25,7 @@ import type {
  */
 const createUserAttributesFactory =
   (postUserAttributes: PostUserAttributes) =>
-  (
-    userId: number,
-    data: UserAttributesData,
-    config?: Record<string, unknown>,
-  ) =>
+  (userId: number, data: UserAttributesData, config?: Config) =>
   async (dispatch: Dispatch): Promise<UserAttributesResponse> => {
     try {
       dispatch({

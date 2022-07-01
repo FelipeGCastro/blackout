@@ -1,8 +1,8 @@
-import { deleteAddress } from '@farfetch/blackout-client/addresses';
+import { deleteUserAddress } from '@farfetch/blackout-client';
 import { removeAddressFactory } from './factories';
 
 /**
  * Responsible for removing the address with the specified 'addressId'.
  */
 
-export default removeAddressFactory(deleteAddress);
+export default removeAddressFactory(deleteUserAddress);

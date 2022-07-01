@@ -24,7 +24,8 @@ const UNVERIFIED_USER = 4;
  *
  * @returns Thunk factory.
  */
-export default (postLogin: PostLogin) =>
+const loginFactory =
+  (postLogin: PostLogin) =>
   (data: LoginData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -56,3 +57,5 @@ export default (postLogin: PostLogin) =>
       throw error;
     }
   };
+
+export default loginFactory;

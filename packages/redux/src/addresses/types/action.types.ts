@@ -1,13 +1,13 @@
 import type * as actionTypes from '../actionTypes';
 import type { Action } from 'redux';
 import type {
-  Address,
+  BlackoutError,
+  CountryAddressSchema,
   Prediction,
   PredictionDetails,
-  Schema,
   User,
-} from '@farfetch/blackout-client/addresses/types';
-import type { BlackoutError } from '@farfetch/blackout-client';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { NormalizedSchema } from 'normalizr';
 
 /**
@@ -20,9 +20,9 @@ export type CreateAddressAction =
 
 type CreateAddressPayload = NormalizedSchema<
   {
-    addresses: Record<Address['id'], Address>;
+    addresses: Record<UserAddress['id'], UserAddress>;
   },
-  Address['id']
+  UserAddress['id']
 >;
 export interface CreateAddressFailureAction extends Action {
   payload: { error: BlackoutError };
@@ -35,7 +35,7 @@ export interface CreateAddressRequestAction extends Action {
 
 export interface CreateAddressSuccessAction extends Action {
   payload: CreateAddressPayload;
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.CREATE_ADDRESS_SUCCESS;
 }
 
@@ -49,9 +49,9 @@ export type FetchAddressesAction =
 
 type FetchAddressesPayload = NormalizedSchema<
   {
-    addresses: Record<Address['id'], Address>;
+    addresses: Record<UserAddress['id'], UserAddress>;
   },
-  Array<Address['id']>
+  Array<UserAddress['id']>
 >;
 export interface FetchAddressesFailureAction extends Action {
   payload: { error: BlackoutError };
@@ -77,53 +77,53 @@ export type FetchAddressAction =
 
 type FetchAddressPayload = NormalizedSchema<
   {
-    addresses: Record<Address['id'], Address>;
+    addresses: Record<UserAddress['id'], UserAddress>;
   },
-  Array<Address['id']>
+  Array<UserAddress['id']>
 >;
 export interface FetchAddressFailureAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.FETCH_ADDRESS_FAILURE;
 }
 
 export interface FetchAddressRequestAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.FETCH_ADDRESS_REQUEST;
 }
 
 export interface FetchAddressSuccessAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: FetchAddressPayload;
   type: typeof actionTypes.FETCH_ADDRESS_SUCCESS;
 }
 
 /**
- * Fetch Address Schema Action.
+ * Fetch Country Address Schemas Action.
  */
-export type FetchAddressSchemaAction =
-  | FetchAddressSchemaFailureAction
-  | FetchAddressSchemaRequestAction
-  | FetchAddressSchemaSuccessAction;
+export type FetchCountryAddressSchemasAction =
+  | FetchCountryAddressSchemasFailureAction
+  | FetchCountryAddressSchemasRequestAction
+  | FetchCountryAddressSchemasSuccessAction;
 
-export interface FetchAddressSchemaFailureAction extends Action {
+export interface FetchCountryAddressSchemasFailureAction extends Action {
   payload: { error: BlackoutError };
-  type: typeof actionTypes.FETCH_ADDRESS_SCHEMA_FAILURE;
+  type: typeof actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_FAILURE;
 }
 
-export interface FetchAddressSchemaRequestAction extends Action {
+export interface FetchCountryAddressSchemasRequestAction extends Action {
   meta: { isoCode: string };
-  type: typeof actionTypes.FETCH_ADDRESS_SCHEMA_REQUEST;
+  type: typeof actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_REQUEST;
 }
 
-export interface FetchAddressSchemaSuccessAction extends Action {
+export interface FetchCountryAddressSchemasSuccessAction extends Action {
   payload: {
     entities: {
-      addressSchema: Record<string, Schema>;
+      addressSchema: Record<string, CountryAddressSchema[]>;
     };
     result: string;
   };
-  type: typeof actionTypes.FETCH_ADDRESS_SCHEMA_SUCCESS;
+  type: typeof actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS;
 }
 
 /**
@@ -144,7 +144,7 @@ export interface FetchDefaultContactAddressRequestAction extends Action {
 }
 
 export interface FetchDefaultContactAddressSuccessAction extends Action {
-  payload: Address;
+  payload: UserAddress;
   type: typeof actionTypes.FETCH_DEFAULT_CONTACT_ADDRESS_SUCCESS;
 }
 
@@ -201,18 +201,18 @@ export type RemoveAddressAction =
   | RemoveAddressSuccessAction;
 
 export interface RemoveAddressFailureAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.REMOVE_ADDRESS_FAILURE;
 }
 
 export interface RemoveAddressRequestAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.REMOVE_ADDRESS_REQUEST;
 }
 
 export interface RemoveAddressSuccessAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.REMOVE_ADDRESS_SUCCESS;
 }
 
@@ -225,18 +225,18 @@ export type RemoveDefaultContactAddressAction =
   | RemoveDefaultContactAddressSuccessAction;
 
 export interface RemoveDefaultContactAddressFailureAction extends Action {
-  meta: { userId: User['id']; addressId: Address['id'] };
+  meta: { userId: User['id']; addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.REMOVE_DEFAULT_CONTACT_ADDRESS_FAILURE;
 }
 
 export interface RemoveDefaultContactAddressRequestAction extends Action {
-  meta: { userId: User['id']; addressId: Address['id'] };
+  meta: { userId: User['id']; addressId: UserAddress['id'] };
   type: typeof actionTypes.REMOVE_DEFAULT_CONTACT_ADDRESS_REQUEST;
 }
 
 export interface RemoveDefaultContactAddressSuccessAction extends Action {
-  meta: { userId: User['id']; addressId: Address['id'] };
+  meta: { userId: User['id']; addressId: UserAddress['id'] };
   type: typeof actionTypes.REMOVE_DEFAULT_CONTACT_ADDRESS_SUCCESS;
 }
 
@@ -249,18 +249,18 @@ export type SetDefaultBillingAddressAction =
   | SetDefaultBillingAddressSuccessAction;
 
 export interface SetDefaultBillingAddressFailureAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.SET_DEFAULT_BILLING_ADDRESS_FAILURE;
 }
 
 export interface SetDefaultBillingAddressRequestAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.SET_DEFAULT_BILLING_ADDRESS_REQUEST;
 }
 
 export interface SetDefaultBillingAddressSuccessAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.SET_DEFAULT_BILLING_ADDRESS_SUCCESS;
 }
 
@@ -273,18 +273,18 @@ export type SetDefaultContactAddressAction =
   | SetDefaultContactAddressSuccessAction;
 
 export interface SetDefaultContactAddressFailureAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.SET_DEFAULT_CONTACT_ADDRESS_FAILURE;
 }
 
 export interface SetDefaultContactAddressRequestAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.SET_DEFAULT_CONTACT_ADDRESS_REQUEST;
 }
 
 export interface SetDefaultContactAddressSuccessAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.SET_DEFAULT_CONTACT_ADDRESS_SUCCESS;
 }
 
@@ -297,18 +297,18 @@ export type SetDefaultShippingAddressAction =
   | SetDefaultShippingAddressSuccessAction;
 
 export interface SetDefaultShippingAddressFailureAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.SET_DEFAULT_SHIPPING_ADDRESS_FAILURE;
 }
 
 export interface SetDefaultShippingAddressRequestAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.SET_DEFAULT_SHIPPING_ADDRESS_REQUEST;
 }
 
 export interface SetDefaultShippingAddressSuccessAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.SET_DEFAULT_SHIPPING_ADDRESS_SUCCESS;
 }
 
@@ -322,23 +322,23 @@ export type UpdateAddressAction =
 
 type UpdateAddressPayload = NormalizedSchema<
   {
-    addresses: Record<Address['id'], Address>;
+    addresses: Record<UserAddress['id'], UserAddress>;
   },
-  Address['id']
+  UserAddress['id']
 >;
 export interface UpdateAddressFailureAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: { error: BlackoutError };
   type: typeof actionTypes.UPDATE_ADDRESS_FAILURE;
 }
 
 export interface UpdateAddressRequestAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   type: typeof actionTypes.UPDATE_ADDRESS_REQUEST;
 }
 
 export interface UpdateAddressSuccessAction extends Action {
-  meta: { addressId: Address['id'] };
+  meta: { addressId: UserAddress['id'] };
   payload: UpdateAddressPayload;
   type: typeof actionTypes.UPDATE_ADDRESS_SUCCESS;
 }

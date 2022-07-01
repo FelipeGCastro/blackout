@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
-import { combineReducers } from 'redux';
+import { AnyAction, combineReducers } from 'redux';
 import { LOGOUT_SUCCESS } from '../authentication/actionTypes';
-import { reducerFactory } from '../helpers';
+import reducerFactory from '../helpers/reducerFactory';
 import type {
   CreateReturnAction,
   CreateReturnFailureAction,
@@ -21,15 +21,16 @@ import type {
   GetReturnsFromOrderRequestAction,
   GetReturnsFromOrderSuccessAction,
   GetReturnSuccessAction,
-  LogoutAction,
   ResetReturnAction,
-  State,
+  ReturnsState,
   UpdateReturnAction,
   UpdateReturnFailureAction,
   UpdateReturnRequestAction,
 } from './types';
+import type { LogoutAction } from '../users/types';
+import type { StoreState } from '../types';
 
-export const INITIAL_STATE: State = {
+export const INITIAL_STATE: ReturnsState = {
   error: null,
   id: null,
   isLoading: false,
@@ -150,11 +151,16 @@ const isLoading = (
 };
 
 export const entitiesMapper = {
-  [actionTypes.RESET_RETURN]: (state: State, action: ResetReturnAction) => {
+  [actionTypes.RESET_RETURN]: (
+    state: StoreState['entities'],
+    action: AnyAction,
+  ) => {
     const {
       meta: { resetEntities },
     } = action;
-    const { returns, returnItems, ...rest } = state;
+    const { returns, returnItems, ...rest } = state as NonNullable<
+      StoreState['entities']
+    >;
 
     if (resetEntities) {
       return {
@@ -164,8 +170,10 @@ export const entitiesMapper = {
 
     return state;
   },
-  [LOGOUT_SUCCESS]: (state: State) => {
-    const { returns, returnItems, ...rest } = state;
+  [LOGOUT_SUCCESS]: (state: StoreState['entities']) => {
+    const { returns, returnItems, ...rest } = state as NonNullable<
+      StoreState['entities']
+    >;
 
     return {
       ...rest,
@@ -191,16 +199,19 @@ const pickupCapabilities = reducerFactory(
   actionTypes,
 );
 
-export const getError = (state: State): State['error'] => state.error;
-export const getId = (state: State): State['id'] => state.id;
-export const getIsLoading = (state: State): State['isLoading'] =>
+export const getError = (state: ReturnsState): ReturnsState['error'] =>
+  state.error;
+export const getId = (state: ReturnsState): ReturnsState['id'] => state.id;
+export const getIsLoading = (state: ReturnsState): ReturnsState['isLoading'] =>
   state.isLoading;
-export const getReturns = (state: State): State['returns'] => state.returns;
-export const getReferences = (state: State): State['references'] =>
-  state.references;
+export const getReturns = (state: ReturnsState): ReturnsState['returns'] =>
+  state.returns;
+export const getReferences = (
+  state: ReturnsState,
+): ReturnsState['references'] => state.references;
 export const getPickupCapabilities = (
-  state: State,
-): State['pickupCapabilities'] => state.pickupCapabilities;
+  state: ReturnsState,
+): ReturnsState['pickupCapabilities'] => state.pickupCapabilities;
 
 /**
  * Reducer for returns state.

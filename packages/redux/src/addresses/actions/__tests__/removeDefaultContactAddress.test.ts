@@ -1,14 +1,14 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { addressId2 } from 'tests/__fixtures__/addresses';
-import { deleteDefaultContactAddress } from '@farfetch/blackout-client/addresses';
+import { deleteUserDefaultContactAddress } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
 import { removeDefaultContactAddress } from '..';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  deleteDefaultContactAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  deleteUserDefaultContactAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -28,15 +28,15 @@ describe('removeDefaultContactAddress() action creator', () => {
   it('should create the correct actions for when the delete default contact address procedure fails', async () => {
     const expectedError = new Error('delete default contact address error');
 
-    deleteDefaultContactAddress.mockRejectedValueOnce(expectedError);
+    deleteUserDefaultContactAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(removeDefaultContactAddress(userId, addressId2));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(deleteDefaultContactAddress).toHaveBeenCalledTimes(1);
-      expect(deleteDefaultContactAddress).toHaveBeenCalledWith(
+      expect(deleteUserDefaultContactAddress).toHaveBeenCalledTimes(1);
+      expect(deleteUserDefaultContactAddress).toHaveBeenCalledWith(
         userId,
         expectedConfig,
       );
@@ -57,14 +57,14 @@ describe('removeDefaultContactAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the delete default contact address procedure is successful', async () => {
-    deleteDefaultContactAddress.mockResolvedValueOnce({});
+    deleteUserDefaultContactAddress.mockResolvedValueOnce({});
     await store.dispatch(removeDefaultContactAddress(userId, addressId2));
 
     const actionResults = store.getActions();
 
     expect.assertions(4);
-    expect(deleteDefaultContactAddress).toHaveBeenCalledTimes(1);
-    expect(deleteDefaultContactAddress).toHaveBeenCalledWith(
+    expect(deleteUserDefaultContactAddress).toHaveBeenCalledTimes(1);
+    expect(deleteUserDefaultContactAddress).toHaveBeenCalledWith(
       userId,
       expectedConfig,
     );
@@ -80,6 +80,6 @@ describe('removeDefaultContactAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.REMOVE_DEFAULT_CONTACT_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('delete default contact address success payload');
+    ).toMatchSnapshot('delete user default contact address success payload');
   });
 });

@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserAddresses,
+  toBlackoutError,
+  User,
+  UserAddress,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import addressesSchema from '../../../entities/schemas/addresses';
-import type {
-  Address,
-  GetAddresses,
-  User,
-} from '@farfetch/blackout-client/addresses/types';
 import type { Dispatch } from 'redux';
 import type { FetchAddressesAction } from '../../types';
 
@@ -20,19 +21,19 @@ import type { FetchAddressesAction } from '../../types';
 /**
  * Responsible for getting all the addresses of the current user.
  *
- * @param getAddresses - Get addresses client.
+ * @param getUserAddresses - Get user addresses client.
  *
  * @returns Thunk factory.
  */
 const fetchAddressesFactory =
-  (getAddresses: GetAddresses) =>
+  (getUserAddresses: GetUserAddresses) =>
   (userId: User['id'], config?: Config) =>
-  async (dispatch: Dispatch<FetchAddressesAction>): Promise<Address[]> => {
+  async (dispatch: Dispatch<FetchAddressesAction>): Promise<UserAddress[]> => {
     try {
       dispatch({
         type: actionTypes.FETCH_ADDRESSES_REQUEST,
       });
-      const result = await getAddresses({ userId }, config);
+      const result = await getUserAddresses({ userId }, config);
 
       dispatch({
         payload: normalize(result, [addressesSchema]),

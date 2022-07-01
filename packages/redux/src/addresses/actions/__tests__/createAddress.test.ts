@@ -1,5 +1,5 @@
+import * as actionTypes from '../../actionTypes';
 import * as normalizr from 'normalizr';
-import { actionTypes } from '../..';
 import { createAddress } from '..';
 import {
   expectedPostAddressNormalizedPayload,
@@ -8,12 +8,12 @@ import {
 } from 'tests/__fixtures__/addresses';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { postAddress } from '@farfetch/blackout-client/addresses';
+import { postUserAddress } from '@farfetch/blackout-client';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  postAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  postUserAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -36,15 +36,15 @@ describe('createAddress() action creator', () => {
   it('should create the correct actions for when the create address procedure fails', async () => {
     const expectedError = new Error('create address error');
 
-    postAddress.mockRejectedValueOnce(expectedError);
+    postUserAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(createAddress(userId, data));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(postAddress).toHaveBeenCalledTimes(1);
-      expect(postAddress).toHaveBeenCalledWith(
+      expect(postUserAddress).toHaveBeenCalledTimes(1);
+      expect(postUserAddress).toHaveBeenCalledWith(
         { userId },
         data,
         expectedConfig,
@@ -64,14 +64,18 @@ describe('createAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the create address procedure is successful', async () => {
-    postAddress.mockResolvedValueOnce(mockPostAddressResponse);
+    postUserAddress.mockResolvedValueOnce(mockPostAddressResponse);
     const result = await store.dispatch(createAddress(userId, data));
     const actionResults = store.getActions();
 
     expect.assertions(6);
     expect(normalizeSpy).toHaveBeenCalledTimes(1);
-    expect(postAddress).toHaveBeenCalledTimes(1);
-    expect(postAddress).toHaveBeenCalledWith({ userId }, data, expectedConfig);
+    expect(postUserAddress).toHaveBeenCalledTimes(1);
+    expect(postUserAddress).toHaveBeenCalledWith(
+      { userId },
+      data,
+      expectedConfig,
+    );
     expect(actionResults).toMatchObject([
       {
         type: actionTypes.CREATE_ADDRESS_REQUEST,

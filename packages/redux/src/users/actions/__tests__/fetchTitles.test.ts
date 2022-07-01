@@ -1,17 +1,17 @@
+import * as actionTypes from '../../actionTypes';
 import * as normalizr from 'normalizr';
-import { actionTypes } from '../..';
 import {
   expectedTitlesNormalizedPayload,
   mockGetTitlesResponse,
 } from 'tests/__fixtures__/users';
 import { fetchTitles } from '..';
-import { getTitles } from '@farfetch/blackout-client/users';
+import { getTitles } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   getTitles: jest.fn(),
 }));
 

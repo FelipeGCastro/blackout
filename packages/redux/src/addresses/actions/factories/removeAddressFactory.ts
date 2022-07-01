@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type {
-  Address,
-  DeleteAddress,
+import {
+  Config,
+  DeleteUserAddress,
+  toBlackoutError,
   User,
-} from '@farfetch/blackout-client/addresses/types';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
 import type { RemoveAddressAction } from '../../types';
 
@@ -24,8 +25,8 @@ import type { RemoveAddressAction } from '../../types';
  * @returns Thunk factory.
  */
 const removeAddressFactory =
-  (deleteAddress: DeleteAddress) =>
-  (userId: User['id'], addressId: Address['id'], config?: Config) =>
+  (deleteAddress: DeleteUserAddress) =>
+  (userId: User['id'], addressId: UserAddress['id'], config?: Config) =>
   async (dispatch: Dispatch<RemoveAddressAction>): Promise<void> => {
     try {
       dispatch({

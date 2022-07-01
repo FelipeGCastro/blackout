@@ -1,5 +1,3 @@
-import type { Schema } from '@farfetch/blackout-client/addresses/types';
+import type { CountryAddressSchema } from '@farfetch/blackout-client';
 
-export type SchemaEntity = Schema;
-
-export type AddressSchemaEntity = Record<string, Schema> | undefined;
+export type CountryAddressSchemasEntity = CountryAddressSchema[];

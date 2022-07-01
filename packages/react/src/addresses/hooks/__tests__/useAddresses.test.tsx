@@ -10,13 +10,13 @@ import { Addresses } from './__fixtures__/Addresses.fixtures';
 import {
   cleanup,
   fireEvent,
-  waitForElementToBeRemoved,
   renderHook,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import {
   createAddress as createAddressAction,
   fetchAddresses,
-  fetchAddressSchema,
+  fetchCountryAddressSchemas,
   fetchPredictionDetails,
   fetchPredictions,
   removeAddress,
@@ -25,14 +25,14 @@ import {
   setDefaultContactAddress as setDefaultContactAddressAction,
   setDefaultShippingAddress as setDefaultShippingAddressAction,
   updateAddress as updateAddressAction,
-} from '@farfetch/blackout-redux/addresses';
+} from '@farfetch/blackout-redux';
 import { mockStore, wrap } from '../../../../tests/helpers';
 import { Provider } from 'react-redux';
 import { useAddresses } from '../..';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-jest.mock('@farfetch/blackout-redux/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-redux/addresses'),
+jest.mock('@farfetch/blackout-redux', () => ({
+  ...jest.requireActual('@farfetch/blackout-redux'),
   fetchAddresses: jest.fn(() => ({ type: 'get' })),
   createAddress: jest.fn(() => ({ type: 'create' })),
   removeAddress: jest.fn(() => ({ type: 'delete' })),
@@ -42,7 +42,7 @@ jest.mock('@farfetch/blackout-redux/addresses', () => ({
   setDefaultShippingAddress: jest.fn(() => ({ type: 'update_shipping' })),
   fetchPredictions: jest.fn(() => ({ type: 'get' })),
   fetchPredictionDetails: jest.fn(() => ({ type: 'get' })),
-  fetchAddressSchema: jest.fn(() => ({ type: 'get' })),
+  fetchCountryAddressSchemas: jest.fn(() => ({ type: 'get' })),
   resetPredictions: jest.fn(() => ({ type: 'reset' })),
 }));
 
@@ -54,7 +54,7 @@ describe('useAddresses', () => {
     const auto = true;
     const addressId = '123456';
     const isoCode = 'PT';
-    const wrapper = (props: {}) => (
+    const wrapper = (props: { children: ReactNode }) => (
       <Provider store={mockStore(mockInitialState)} {...props} />
     );
     const {
@@ -71,13 +71,13 @@ describe('useAddresses', () => {
     expect(typeof current.setDefaultShippingAddress).toBe('function');
     expect(current.addressesIds).toBeNull();
     expect(current.addressesError).toBeNull();
-    expect(current.isAddressesLoading).toBeFalsy();
+    expect(current.areAddressesLoading).toBeFalsy();
     expect(current.addressError).toBeUndefined();
     expect(current.isAddressLoading).toBeFalsy();
     expect(current.predictionsError).toBeNull();
     expect(current.isPredictionsLoading).toBeFalsy();
     expect(current.predictionDetailsError).toBeNull();
-    expect(current.isPredictionDetailsLoading).toBeFalsy();
+    expect(current.arePredictionDetailsLoading).toBeFalsy();
     expect(current.predictions).toBeNull();
     expect(typeof current.handleGetPredictions).toBe('function');
     expect(typeof current.handleGetPredictionDetails).toBe('function');
@@ -368,14 +368,14 @@ describe('useAddresses', () => {
     });
 
     describe('handleGetAddressSchema', () => {
-      it('should call fetchAddressSchema action', () => {
+      it('should call fetchCountryAddressSchemas action', () => {
         const { getByTestId } = wrap(<Addresses userId={userId} />)
           .withStore(mockInitialState)
           .render();
 
         fireEvent.click(getByTestId('addresses-handleGetAddressSchema'));
 
-        expect(fetchAddressSchema).toHaveBeenCalledTimes(1);
+        expect(fetchCountryAddressSchemas).toHaveBeenCalledTimes(1);
       });
     });
 

@@ -35,6 +35,6 @@ Object {
       "totalPages": 1,
     },
   },
-  "type": "@farfetch/blackout-client/FETCH_CREDIT_MOVEMENTS_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_CREDIT_MOVEMENTS_SUCCESS",
 }
 `;

@@ -1,7 +1,8 @@
+import * as actionTypes from '../actionTypes';
 import * as fromReducer from '../reducer';
 import { getInitialState } from '../../../tests';
 import { mockResponse } from 'tests/__fixtures__/authentication';
-import reducer, { actionTypes, entitiesMapper } from '..';
+import reducer, { entitiesMapper } from '../reducer';
 import type { State } from '../types';
 
 let initialState: State;
@@ -150,10 +151,10 @@ describe('authentication reducer', () => {
       },
     );
 
-    it('should handle @farfetch/blackout-client/LOGOUT_SUCCESS action type', () => {
+    it('should handle @farfetch/blackout-redux/LOGOUT_SUCCESS action type', () => {
       expect(
         reducer(undefined, {
-          type: '@farfetch/blackout-client/LOGOUT_SUCCESS',
+          type: '@farfetch/blackout-redux/LOGOUT_SUCCESS',
         }).id,
       ).toBe(initialState.id);
     });

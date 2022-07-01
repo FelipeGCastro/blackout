@@ -1,11 +1,13 @@
-import { AuthenticationConfigOptions } from '@farfetch/blackout-client';
-import { getUser } from '@farfetch/blackout-client/users';
+import {
+  AuthenticationConfigOptions,
+  getUser,
+  GetUserResponse,
+} from '@farfetch/blackout-client';
 import { ProfileChangedError } from '../errors';
 import noop from 'lodash/noop';
 import React, { useCallback, useEffect, useReducer, useRef } from 'react';
 import useAuthentication from '../hooks/useAuthentication';
 import UserProfileContext from './UserProfileContext';
-import type { GetUserResponse } from '@farfetch/blackout-client/users/types';
 
 interface Props {
   children: React.ReactNode;
@@ -143,8 +145,11 @@ const UserProfileProvider = ({
       currentLoadProfilePromiseRef.current = null;
 
       return userData;
-    } catch (error: any) {
-      dispatch({ type: ActionTypes.GetUserFailed, payload: error });
+    } catch (error) {
+      dispatch({
+        type: ActionTypes.GetUserFailed,
+        payload: error as GetUserResponse | Error | undefined,
+      });
       throw error;
     }
   }, [dispatch, tokenManager]);

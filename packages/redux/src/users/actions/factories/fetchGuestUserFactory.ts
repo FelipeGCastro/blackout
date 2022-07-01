@@ -1,7 +1,10 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetGuestUser,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
-import type { GetGuestUser } from '@farfetch/blackout-client/users/types';
 
 /**
  * @param id     - Universal identifier of the user.

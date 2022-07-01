@@ -1,5 +1,5 @@
 import { createPhoneNumberValidationsFactory } from './factories';
-import { postPhoneNumberValidations } from '@farfetch/blackout-client/users';
+import { postPhoneNumberValidations } from '@farfetch/blackout-client';
 
 /**
  * Validates a phone number without an account.

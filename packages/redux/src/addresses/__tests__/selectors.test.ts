@@ -18,30 +18,32 @@ describe('addresses redux selectors', () => {
 
   beforeEach(jest.clearAllMocks);
 
-  describe('getResult()', () => {
+  describe('getAddressesResult()', () => {
     it('should get the result property from state', () => {
       const spy = jest.spyOn(fromAddresses, 'getResult');
-      expect(selectors.getResult(mockState)).toEqual(
+      expect(selectors.getAddressesResult(mockState)).toEqual(
         mockState.addresses.result,
       );
       expect(spy).toHaveBeenCalledWith(mockState.addresses);
     });
   });
 
-  describe('getError()', () => {
+  describe('getAddressesError()', () => {
     it('should get the error property from state', () => {
       const spy = jest.spyOn(fromAddresses, 'getError');
 
-      expect(selectors.getError(mockState)).toEqual(mockState.addresses.error);
+      expect(selectors.getAddressesError(mockState)).toEqual(
+        mockState.addresses.error,
+      );
       expect(spy).toHaveBeenCalledWith(mockState.addresses);
     });
   });
 
-  describe('isAddressesLoading()', () => {
+  describe('areAddressesLoading()', () => {
     it('should get the addresses loading property from state', () => {
       const spy = jest.spyOn(fromAddresses, 'getIsLoading');
 
-      expect(selectors.isAddressesLoading(mockState)).toEqual(false);
+      expect(selectors.areAddressesLoading(mockState)).toEqual(false);
       expect(spy).toHaveBeenCalledWith(mockState.addresses);
     });
   });
@@ -111,7 +113,7 @@ describe('addresses redux selectors', () => {
     it('should get the schema for a specific country from state', () => {
       const spy = jest.spyOn(fromEntities, 'getEntityById');
 
-      expect(selectors.getSchema(mockState, countryId)).toEqual(
+      expect(selectors.getAddressSchema(mockState, countryId)).toEqual(
         addressSchemaEntity,
       );
       expect(spy).toHaveBeenCalledWith(mockState, 'addressSchema', countryId);
@@ -154,7 +156,7 @@ describe('addresses redux selectors', () => {
     it('should get the predictions isLoading property from state', () => {
       const spy = jest.spyOn(fromAddresses, 'getPredictions');
 
-      expect(selectors.isPredictionsLoading(mockState)).toEqual(
+      expect(selectors.arePredictionsLoading(mockState)).toEqual(
         mockState.addresses.predictions.isLoading,
       );
       expect(spy).toHaveBeenCalledWith(mockState.addresses);
@@ -183,7 +185,7 @@ describe('addresses redux selectors', () => {
     it('should get the address isLoading property from state', () => {
       const spy = jest.spyOn(fromAddresses, 'getPredictionDetails');
 
-      expect(selectors.isPredictionDetailsLoading(mockState)).toEqual(
+      expect(selectors.arePredictionDetailsLoading(mockState)).toEqual(
         mockState.addresses.predictionDetails.isLoading,
       );
       expect(spy).toHaveBeenCalledWith(mockState.addresses);

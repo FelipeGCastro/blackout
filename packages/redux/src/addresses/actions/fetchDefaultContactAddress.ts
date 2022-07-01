@@ -1,8 +1,8 @@
 import { fetchDefaultContactAddressFactory } from './factories';
-import { getDefaultContactAddress } from '@farfetch/blackout-client/addresses';
+import { getUserDefaultContactAddress } from '@farfetch/blackout-client';
 
 /**
  * Responsible for obtaining the default contact address of the user.
  */
 
-export default fetchDefaultContactAddressFactory(getDefaultContactAddress);
+export default fetchDefaultContactAddressFactory(getUserDefaultContactAddress);

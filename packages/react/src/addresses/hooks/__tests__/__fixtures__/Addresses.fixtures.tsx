@@ -21,7 +21,7 @@ export const Addresses = ({ userId }: Props) => {
   const auto = true;
   const {
     addressesError,
-    isAddressesLoading,
+    areAddressesLoading,
     deletingStatus,
     deleteAddress,
     createAddress,
@@ -43,10 +43,10 @@ export const Addresses = ({ userId }: Props) => {
     resetPredictions,
   } = useAddresses({ auto, userId });
 
-  if (isAddressesLoading) {
+  if (areAddressesLoading) {
     return (
       <span data-test="addresses-loading">
-        {booleanToText(isAddressesLoading)}
+        {booleanToText(areAddressesLoading)}
       </span>
     );
   }

@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   PatchUserAttribute,
   PatchUserAttributeData,
-} from '@farfetch/blackout-client/users/attributes/types';
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * @param userId      - User's id to be filtered for.
@@ -28,7 +29,7 @@ const updateUserAttributeFactory =
     userId: number,
     attributeId: string,
     data: PatchUserAttributeData[],
-    config?: Record<string, unknown>,
+    config?: Config,
   ) =>
   async (dispatch: Dispatch): Promise<number> => {
     try {

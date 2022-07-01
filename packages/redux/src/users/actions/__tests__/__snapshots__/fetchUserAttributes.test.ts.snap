@@ -12,6 +12,6 @@ Object {
       "userId": 0,
     },
   ],
-  "type": "@farfetch/blackout-client/FETCH_USER_ATTRIBUTES_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_USER_ATTRIBUTES_SUCCESS",
 }
 `;

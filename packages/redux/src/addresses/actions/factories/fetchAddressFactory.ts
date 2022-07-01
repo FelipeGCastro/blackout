@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserAddress,
+  toBlackoutError,
+  User,
+  UserAddress,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import addressesSchema from '../../../entities/schemas/addresses';
-import type {
-  Address,
-  GetAddress,
-  User,
-} from '@farfetch/blackout-client/addresses/types';
 import type { Dispatch } from 'redux';
 import type { FetchAddressAction } from '../../types';
 
@@ -20,20 +21,20 @@ import type { FetchAddressAction } from '../../types';
 /**
  * Gets the details of the address with the specified 'addressId'.
  *
- * @param getAddress - Get address client.
+ * @param getUserAddress - Get user address client.
  *
  * @returns Thunk factory.
  */
 const fetchAddressFactory =
-  (getAddress: GetAddress) =>
-  (userId: User['id'], addressId: Address['id'], config?: Config) =>
-  async (dispatch: Dispatch<FetchAddressAction>): Promise<Address> => {
+  (getUserAddress: GetUserAddress) =>
+  (userId: User['id'], addressId: UserAddress['id'], config?: Config) =>
+  async (dispatch: Dispatch<FetchAddressAction>): Promise<UserAddress> => {
     try {
       dispatch({
         meta: { addressId },
         type: actionTypes.FETCH_ADDRESS_REQUEST,
       });
-      const result = await getAddress({ id: addressId, userId }, config);
+      const result = await getUserAddress({ id: addressId, userId }, config);
 
       dispatch({
         meta: { addressId },

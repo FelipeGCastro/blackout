@@ -1,9 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserContact,
+  toBlackoutError,
+  UserContact,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import contactsSchema from '../../../entities/schemas/contact';
 import type { Dispatch } from 'redux';
-import type { GetUserContact } from '@farfetch/blackout-client/users/contacts/types';
 
 /**
  * Get contact from user.
@@ -14,7 +18,7 @@ import type { GetUserContact } from '@farfetch/blackout-client/users/contacts/ty
  */
 const fetchContactFactory =
   (getContact: GetUserContact) =>
-  (id: number, contactId: string, config?: Config) =>
+  (id: number, contactId: UserContact['id'], config?: Config) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({

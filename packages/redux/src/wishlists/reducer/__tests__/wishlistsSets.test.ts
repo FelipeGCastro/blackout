@@ -1,4 +1,4 @@
-import { actionTypes } from '../../';
+import * as actionTypes from '../../actionTypes';
 import { entitiesMapper } from '../';
 import { LOGOUT_SUCCESS } from '../../../authentication/actionTypes';
 import {

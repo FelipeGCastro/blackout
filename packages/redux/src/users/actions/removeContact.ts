@@ -1,4 +1,4 @@
-import { deleteUserContact } from '@farfetch/blackout-client/users';
+import { deleteUserContact } from '@farfetch/blackout-client';
 import { removeContactFactory } from './factories';
 
 /**

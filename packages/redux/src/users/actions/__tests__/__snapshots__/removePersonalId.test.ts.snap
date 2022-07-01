@@ -12,6 +12,6 @@ Object {
     "maskedName": "",
     "verifyLevel": 1,
   },
-  "type": "@farfetch/blackout-client/REMOVE_PERSONAL_ID_SUCCESS",
+  "type": "@farfetch/blackout-redux/REMOVE_PERSONAL_ID_SUCCESS",
 }
 `;

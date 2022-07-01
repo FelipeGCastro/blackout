@@ -1,7 +1,6 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import { Config, GetUser, toBlackoutError } from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
-import type { GetUser } from '@farfetch/blackout-client/users/types';
 
 /**
  * @param config - Custom configurations to send to the client

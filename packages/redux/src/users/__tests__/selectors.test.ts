@@ -85,15 +85,6 @@ describe('users redux selectors', () => {
     });
   });
 
-  describe('getUserId()', () => {
-    it('should get the user id property from state', () => {
-      const spy = jest.spyOn(fromUsers, 'getResult');
-
-      expect(selectors.getUserId(mockState)).toEqual(userId);
-      expect(spy).toHaveBeenCalledWith(mockState.users);
-    });
-  });
-
   describe('Sub-areas selectors', () => {
     const subAreaNames = [
       'Benefits',
@@ -183,26 +174,6 @@ describe('users redux selectors', () => {
 
       expect(selectors.getTitleById(mockState, idTitle1)).toEqual(title);
       expect(spy).toHaveBeenCalledWith(mockState, 'titles', idTitle1);
-    });
-  });
-
-  describe('getCredit()', () => {
-    it('should get the credit balance from state', () => {
-      const expectedResult = mockState.entities.credit;
-      const spy = jest.spyOn(fromEntities, 'getEntities');
-
-      expect(selectors.getCredit(mockState)).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(mockState, 'credit');
-    });
-  });
-
-  describe('getCreditMovements()', () => {
-    it('should get the credit movements from state', () => {
-      const expectedResult = mockState.entities.creditMovements;
-      const spy = jest.spyOn(fromEntities, 'getEntities');
-
-      expect(selectors.getCreditMovements(mockState)).toEqual(expectedResult);
-      expect(spy).toHaveBeenCalledWith(mockState, 'creditMovements');
     });
   });
 

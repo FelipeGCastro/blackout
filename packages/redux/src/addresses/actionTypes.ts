@@ -148,20 +148,20 @@ export const SET_DEFAULT_SHIPPING_ADDRESS_SUCCESS =
   '@farfetch/blackout-redux/SET_DEFAULT_SHIPPING_ADDRESS_SUCCESS';
 
 /**
- * Action type dispatched when the fetch address schema request fails.
+ * Action type dispatched when the fetch country address schemas request fails.
  */
-export const FETCH_ADDRESS_SCHEMA_FAILURE =
-  '@farfetch/blackout-redux/FETCH_ADDRESS_SCHEMA_FAILURE';
+export const FETCH_COUNTRY_ADDRESS_SCHEMAS_FAILURE =
+  '@farfetch/blackout-redux/FETCH_COUNTRY_ADDRESS_SCHEMAS_FAILURE';
 /**
- * Action type dispatched when the fetch address schema request starts.
+ * Action type dispatched when the fetch country address schemas request starts.
  */
-export const FETCH_ADDRESS_SCHEMA_REQUEST =
-  '@farfetch/blackout-redux/FETCH_ADDRESS_SCHEMA_REQUEST';
+export const FETCH_COUNTRY_ADDRESS_SCHEMAS_REQUEST =
+  '@farfetch/blackout-redux/FETCH_COUNTRY_ADDRESS_SCHEMAS_REQUEST';
 /**
- * Action type dispatched when the fetch address schema request succeeds.
+ * Action type dispatched when the fetch country address schemas request succeeds.
  */
-export const FETCH_ADDRESS_SCHEMA_SUCCESS =
-  '@farfetch/blackout-redux/FETCH_ADDRESS_SCHEMA_SUCCESS';
+export const FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS =
+  '@farfetch/blackout-redux/FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS';
 
 /**
  * Action type dispatched when set default contact address request fails.

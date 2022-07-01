@@ -1,4 +1,4 @@
-import { patchUserPersonalId } from '@farfetch/blackout-client/users';
+import { patchUserPersonalId } from '@farfetch/blackout-client';
 import { updatePersonalIdFactory } from './factories';
 
 /**

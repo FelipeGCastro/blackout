@@ -1,16 +1,15 @@
 import * as actionTypes from './actionTypes';
-import { combineReducers } from 'redux';
-import { createReducerWithResult, reducerFactory } from '../helpers';
-import { LOGOUT_SUCCESS } from '@farfetch/blackout-redux/authentication/actionTypes';
+import { AnyAction, combineReducers } from 'redux';
+import { LOGOUT_SUCCESS } from '../authentication/actionTypes';
 import get from 'lodash/get';
 import omit from 'lodash/omit';
 import produce from 'immer';
+import reducerFactory, {
+  createReducerWithResult,
+} from '../helpers/reducerFactory';
 import type * as T from './types';
 import type { AddressEntity, AddressesEntity } from '../entities/types';
-import type {
-  Prediction,
-  PredictionDetails,
-} from '@farfetch/blackout-client/addresses/types';
+import type { Prediction, PredictionDetails } from '@farfetch/blackout-client';
 import type {
   ReducerSwitch,
   StateWithResult,
@@ -18,7 +17,7 @@ import type {
   StoreState,
 } from '../types';
 
-export const INITIAL_STATE: T.State = {
+export const INITIAL_STATE: T.AddressesState = {
   error: null,
   isLoading: false,
   result: null,
@@ -61,8 +60,10 @@ export const getDefaultAddress = (
   prop: 'isCurrentShipping' | 'isCurrentBilling' | 'isCurrentPreferred',
 ): AddressEntity | null | undefined => {
   for (const key in addressesList) {
-    if (addressesList[key] && addressesList[key][prop]) {
-      return addressesList[key];
+    const address = addressesList[key];
+
+    if (address && address[prop]) {
+      return address;
     }
   }
   return null;
@@ -74,11 +75,15 @@ const result = (
     | T.FetchAddressesSuccessAction
     | T.CreateAddressSuccessAction
     | T.RemoveAddressSuccessAction,
-): T.State['result'] => {
+): T.AddressesState['result'] => {
   switch (action.type) {
     case actionTypes.FETCH_ADDRESSES_SUCCESS:
       return action.payload.result;
     case actionTypes.CREATE_ADDRESS_SUCCESS:
+      if (!state) {
+        return [action.meta.addressId];
+      }
+
       return [...state, action.meta.addressId];
     case actionTypes.REMOVE_ADDRESS_SUCCESS: {
       return (
@@ -115,7 +120,7 @@ const error = (
     | T.RemoveDefaultContactAddressRequestAction
     | T.FetchDefaultContactAddressFailureAction
     | T.FetchDefaultContactAddressRequestAction,
-): T.State['error'] => {
+): T.AddressesState['error'] => {
   switch (action.type) {
     case actionTypes.FETCH_PREDICTION_FAILURE:
     case actionTypes.FETCH_PREDICTION_DETAILS_FAILURE:
@@ -160,7 +165,7 @@ const isLoading = (
     | T.SetDefaultContactAddressAction
     | T.RemoveDefaultContactAddressAction
     | T.FetchDefaultContactAddressAction,
-): T.State['isLoading'] => {
+): T.AddressesState['isLoading'] => {
   switch (action.type) {
     case actionTypes.FETCH_PREDICTION_REQUEST:
     case actionTypes.FETCH_PREDICTION_DETAILS_REQUEST:
@@ -266,12 +271,16 @@ export const entitiesMapper = {
   [actionTypes.CREATE_ADDRESS_SUCCESS as typeof actionTypes.CREATE_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.CreateAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const id = action.payload.result;
       const createdAddress = action.payload.entities.addresses[id];
 
       return produce(state, draftState => {
+        if (!draftState) {
+          draftState = {};
+        }
+
         if (!draftState.addresses) {
           draftState.addresses = {};
         }
@@ -285,12 +294,16 @@ export const entitiesMapper = {
   [actionTypes.UPDATE_ADDRESS_SUCCESS as typeof actionTypes.UPDATE_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.UpdateAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const id = action.payload.result;
       const updatedAddress = action.payload.entities.addresses[id];
 
       return produce(state, draftState => {
+        if (!draftState) {
+          draftState = {};
+        }
+
         if (!draftState.addresses) {
           draftState.addresses = {};
         }
@@ -304,66 +317,113 @@ export const entitiesMapper = {
   [actionTypes.REMOVE_ADDRESS_SUCCESS as typeof actionTypes.REMOVE_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.RemoveAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const { addressId } = action.meta;
-      const currentAddresses = state.addresses;
+      const currentAddresses = state?.addresses;
 
       return produce(state, draftState => {
+        if (!draftState) {
+          return draftState;
+        }
+
         draftState.addresses = omit(currentAddresses, addressId);
+        return draftState;
       });
     },
   [actionTypes.SET_DEFAULT_SHIPPING_ADDRESS_SUCCESS as typeof actionTypes.SET_DEFAULT_SHIPPING_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.SetDefaultShippingAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const { addressId } = action.meta;
 
       // Get prev default address so it can later be unmarked as the default
       const prevCurrentShippingAddress = getDefaultAddress(
-        state.addresses,
+        state?.addresses,
         'isCurrentShipping',
       );
 
       return produce(state, draftState => {
+        if (!draftState) {
+          return draftState;
+        }
+
+        const addresses = draftState.addresses;
+
+        if (!addresses) {
+          return draftState;
+        }
+
         if (prevCurrentShippingAddress) {
           // Unmark previous shipping address as default
-          draftState.addresses[
-            prevCurrentShippingAddress.id
-          ].isCurrentShipping = false;
+          const prevCurrentShippingAddressStore =
+            addresses[prevCurrentShippingAddress.id];
+
+          if (prevCurrentShippingAddressStore) {
+            prevCurrentShippingAddressStore.isCurrentShipping = false;
+          }
         }
+
         // Select the selected address as default
-        draftState.addresses[addressId].isCurrentShipping = true;
+        const newDefaultShippingAddress = addresses[addressId];
+
+        if (newDefaultShippingAddress) {
+          newDefaultShippingAddress.isCurrentShipping = true;
+        }
+
+        return draftState;
       });
     },
   [actionTypes.SET_DEFAULT_BILLING_ADDRESS_SUCCESS as typeof actionTypes.SET_DEFAULT_BILLING_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.SetDefaultBillingAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const { addressId } = action.meta;
 
       // Get prev default address so it can later be unmarked as the default
       const prevCurrentBillingAddress = getDefaultAddress(
-        state.addresses,
+        state?.addresses,
         'isCurrentBilling',
       );
 
       return produce(state, draftState => {
+        if (!draftState) {
+          return draftState;
+        }
+
+        const addresses = draftState.addresses;
+
+        if (!addresses) {
+          return draftState;
+        }
+
         if (prevCurrentBillingAddress) {
           // Unmark previous billing address as default
-          draftState.addresses[prevCurrentBillingAddress.id].isCurrentBilling =
-            false;
+
+          const prevCurrentBillingAddressStore =
+            addresses[prevCurrentBillingAddress.id];
+
+          if (prevCurrentBillingAddressStore) {
+            prevCurrentBillingAddressStore.isCurrentBilling = false;
+          }
         }
+
         // Select the selected address as default
-        draftState.addresses[addressId].isCurrentBilling = true;
+        const newDefaultBillingAddress = addresses[addressId];
+
+        if (newDefaultBillingAddress) {
+          newDefaultBillingAddress.isCurrentBilling = true;
+        }
+
+        return draftState;
       });
     },
-  [actionTypes.FETCH_ADDRESS_SCHEMA_SUCCESS as typeof actionTypes.FETCH_ADDRESS_SCHEMA_SUCCESS]:
+  [actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS as typeof actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.FetchAddressSchemaSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const countryId = action.payload.result;
       const countrySchema = get(
@@ -385,37 +445,73 @@ export const entitiesMapper = {
   [actionTypes.SET_DEFAULT_CONTACT_ADDRESS_SUCCESS as typeof actionTypes.SET_DEFAULT_CONTACT_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.SetDefaultContactAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const { addressId } = action.meta;
 
       // Get prev default address so it can later be unmarked as the default
       const prevCurrentContactAddress = getDefaultAddress(
-        state.addresses,
+        state?.addresses,
         'isCurrentPreferred',
       );
 
       return produce(state, draftState => {
+        if (!draftState) {
+          return draftState;
+        }
+
+        const addresses = draftState.addresses;
+
+        if (!addresses) {
+          return draftState;
+        }
+
         if (prevCurrentContactAddress) {
           // Unmark previous contact address as default
-          draftState.addresses[
-            prevCurrentContactAddress.id
-          ].isCurrentPreferred = false;
+          const prevCurrentContactAddressStore =
+            addresses[prevCurrentContactAddress.id];
+
+          if (prevCurrentContactAddressStore) {
+            prevCurrentContactAddressStore.isCurrentPreferred = false;
+          }
         }
+
         // Select the selected address as default
-        draftState.addresses[addressId].isCurrentPreferred = true;
+        const newDefaultContactAddress = addresses[addressId];
+
+        if (newDefaultContactAddress) {
+          newDefaultContactAddress.isCurrentPreferred = true;
+        }
+
+        return draftState;
       });
     },
   [actionTypes.REMOVE_DEFAULT_CONTACT_ADDRESS_SUCCESS as typeof actionTypes.REMOVE_DEFAULT_CONTACT_ADDRESS_SUCCESS]:
     (
       state: StoreState['entities'],
-      action: T.RemoveDefaultContactAddressSuccessAction,
+      action: AnyAction,
     ): StoreState['entities'] => {
       const { addressId } = action.meta;
 
       return produce(state, draftState => {
+        if (!draftState || !draftState.addresses) {
+          return draftState;
+        }
+
+        const addresses = draftState.addresses;
+
+        if (!addresses) {
+          return draftState;
+        }
+
         // Unmark the selected address as default
-        draftState.addresses[addressId].isCurrentPreferred = false;
+        const defaultContactAddress = draftState.addresses[addressId];
+
+        if (defaultContactAddress) {
+          defaultContactAddress.isCurrentPreferred = false;
+        }
+
+        return draftState;
       });
     },
   [LOGOUT_SUCCESS as typeof LOGOUT_SUCCESS]: (
@@ -515,24 +611,33 @@ export const defaultAddressDetails = createReducerWithResult(
   actionTypes,
 );
 
-export const getError = (state: T.State): T.State['error'] => state.error;
-export const getIsLoading = (state: T.State): T.State['isLoading'] =>
-  state.isLoading;
-export const getResult = (state: T.State): T.State['result'] => state.result;
+export const getError = (state: T.AddressesState): T.AddressesState['error'] =>
+  state.error;
+export const getIsLoading = (
+  state: T.AddressesState,
+): T.AddressesState['isLoading'] => state.isLoading;
+export const getResult = (
+  state: T.AddressesState,
+): T.AddressesState['result'] => state.result;
 
-export const getPredictions = (state: T.State): T.State['predictions'] =>
-  state.predictions;
+export const getPredictions = (
+  state: T.AddressesState,
+): T.AddressesState['predictions'] => state.predictions;
 export const getPredictionDetails = (
-  state: T.State,
-): T.State['predictionDetails'] => state.predictionDetails;
-export const getAddresses = (state: T.State): T.State['addresses'] =>
-  state.addresses;
-export const getAddress = (state: T.State): T.State['address'] => state.address;
-export const getAddressSchema = (state: T.State): T.State['addressSchema'] =>
-  state.addressSchema;
+  state: T.AddressesState,
+): T.AddressesState['predictionDetails'] => state.predictionDetails;
+export const getAddresses = (
+  state: T.AddressesState,
+): T.AddressesState['addresses'] => state.addresses;
+export const getAddress = (
+  state: T.AddressesState,
+): T.AddressesState['address'] => state.address;
+export const getAddressSchema = (
+  state: T.AddressesState,
+): T.AddressesState['addressSchema'] => state.addressSchema;
 export const getDefaultAddressDetails = (
-  state: T.State,
-): T.State['defaultAddressDetails'] => state.defaultAddressDetails;
+  state: T.AddressesState,
+): T.AddressesState['defaultAddressDetails'] => state.defaultAddressDetails;
 
 const reducer = combineReducers({
   error,
@@ -554,7 +659,7 @@ const reducer = combineReducers({
  *
  * @returns New state.
  */
-const addressesReducer: ReducerSwitch<T.State> = (state, action) => {
+const addressesReducer: ReducerSwitch<T.AddressesState> = (state, action) => {
   if (
     action.type === actionTypes.RESET_ADDRESSES ||
     action.type === LOGOUT_SUCCESS

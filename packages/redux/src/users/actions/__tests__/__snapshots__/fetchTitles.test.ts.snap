@@ -25,6 +25,6 @@ Object {
       "totalPages": 1,
     },
   },
-  "type": "@farfetch/blackout-client/FETCH_TITLES_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_TITLES_SUCCESS",
 }
 `;

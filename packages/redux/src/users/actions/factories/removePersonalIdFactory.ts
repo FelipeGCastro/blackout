@@ -1,6 +1,9 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type { DeleteUserPersonalId } from '@farfetch/blackout-client/users/personalIds/types';
+import {
+  Config,
+  DeleteUserPersonalId,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
 
 /**

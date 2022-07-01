@@ -14,15 +14,15 @@ import type {
   RemoveWishlistItemFailureAction,
   RemoveWishlistItemRequestAction,
   RemoveWishlistItemSuccessAction,
-  SetsState,
-  State,
   UpdateWishlistItemFailureAction,
   UpdateWishlistItemRequestAction,
   UpdateWishlistItemSuccessAction,
+  WishlistSetsState,
+  WishlistsState,
 } from '../types';
 import type { ReducerSwitch, StoreState } from '../../types';
 
-export const INITIAL_STATE: State = {
+export const INITIAL_STATE: WishlistsState = {
   error: null,
   id: null,
   isLoading: false,
@@ -185,17 +185,19 @@ const itemsReducer = (
 //
 export const entitiesMapper = {
   [actionTypes.RESET_WISHLIST_ENTITIES as typeof actionTypes.RESET_WISHLIST_ENTITIES]:
-    (
-      state: StoreState['entities'],
-    ): Omit<StoreState['entities'], 'wishlistItems' | 'wishlistSets'> => {
-      const { wishlistItems, wishlistSets, ...rest } = state;
+    (state: StoreState['entities']): StoreState['entities'] => {
+      const { wishlistItems, wishlistSets, ...rest } = state as NonNullable<
+        StoreState['entities']
+      >;
 
       return rest;
     },
   [LOGOUT_SUCCESS as typeof LOGOUT_SUCCESS]: (
     state: StoreState['entities'],
-  ): Omit<StoreState['entities'], 'wishlistItems' | 'wishlistSets'> => {
-    const { wishlistItems, wishlistSets, ...rest } = state;
+  ): StoreState['entities'] => {
+    const { wishlistItems, wishlistSets, ...rest } = state as NonNullable<
+      StoreState['entities']
+    >;
 
     return rest;
   },
@@ -204,18 +206,23 @@ export const entitiesMapper = {
 //
 // Selectors from reducer
 //
-export const getError = (state: State): State['error'] => state.error;
-export const getId = (state: State): State['id'] => state.id;
-export const getResult = (state: State): State['result'] => state.result;
-export const getIsLoading = (state: State): State['isLoading'] =>
-  state.isLoading;
-export const getItemsIds = (state: State): State['items']['ids'] =>
-  state.items.ids;
+export const getError = (state: WishlistsState): WishlistsState['error'] =>
+  state.error;
+export const getId = (state: WishlistsState): WishlistsState['id'] => state.id;
+export const getResult = (state: WishlistsState): WishlistsState['result'] =>
+  state.result;
+export const getIsLoading = (
+  state: WishlistsState,
+): WishlistsState['isLoading'] => state.isLoading;
+export const getItemsIds = (
+  state: WishlistsState,
+): WishlistsState['items']['ids'] => state.items.ids;
 export const getAreItemsLoading = (
-  state: State,
-): State['items']['item']['isLoading'] => state.items.item.isLoading;
-export const getItemsError = (state: State): State['items']['item']['error'] =>
-  state.items.item.error;
+  state: WishlistsState,
+): WishlistsState['items']['item']['isLoading'] => state.items.item.isLoading;
+export const getItemsError = (
+  state: WishlistsState,
+): WishlistsState['items']['item']['error'] => state.items.item.error;
 
 //
 // Combining and exporting
@@ -226,7 +233,7 @@ const reducer = combineReducers({
   result,
   id: idReducer,
   items: itemsReducer,
-  sets: wishlistsSetReducer as Reducer<SetsState>,
+  sets: wishlistsSetReducer as Reducer<WishlistSetsState>,
 });
 
 /**
@@ -237,7 +244,7 @@ const reducer = combineReducers({
  *
  * @returns New state.
  */
-const wishlistsReducer: ReducerSwitch<State> = (state, action) => {
+const wishlistsReducer: ReducerSwitch<WishlistsState> = (state, action) => {
   if (action.type === LOGOUT_SUCCESS) {
     return INITIAL_STATE;
   }
@@ -248,22 +255,27 @@ const wishlistsReducer: ReducerSwitch<State> = (state, action) => {
     if (!fieldsToReset) {
       return INITIAL_STATE;
     } else {
-      const reducerFn = (acc: State, field: keyof State) => {
+      const reducerFn = (acc: WishlistsState, field: keyof WishlistsState) => {
+        if (!state) {
+          return state;
+        }
+
         if (
-          state.items[field as keyof State['items']] ||
-          state.items.item[field as keyof State['items']['item']]
+          state.items[field as keyof WishlistsState['items']] ||
+          state.items.item[field as keyof WishlistsState['items']['item']]
         ) {
           return {
             ...acc,
             [field]: INITIAL_STATE[field],
             items: {
               ...acc.items,
-              [field]: INITIAL_STATE.items[field as keyof State['items']],
+              [field]:
+                INITIAL_STATE.items[field as keyof WishlistsState['items']],
               item: {
                 ...acc.items.item,
                 [field]:
                   INITIAL_STATE.items.item[
-                    field as keyof State['items']['item']
+                    field as keyof WishlistsState['items']['item']
                   ],
               },
             },

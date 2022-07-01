@@ -1,8 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserCredit,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import isEmpty from 'lodash/isEmpty';
 import type { Dispatch } from 'redux';
-import type { GetUserCredit } from '@farfetch/blackout-client/users/credits/types';
 
 /**
  * @param id     - User identifier.
@@ -14,13 +17,13 @@ import type { GetUserCredit } from '@farfetch/blackout-client/users/credits/type
 /**
  * Fetch user credit balance.
  *
- * @param getCredit - Get credit client.
+ * @param getUserCredit - Get user credit client.
  *
  * @returns Thunk factory.
  */
 
 const fetchCreditFactory =
-  (getCredit: GetUserCredit) =>
+  (getUserCredit: GetUserCredit) =>
   (id: string, config?: Config) =>
   async (dispatch: Dispatch) => {
     try {
@@ -34,7 +37,7 @@ const fetchCreditFactory =
         type: actionTypes.FETCH_CREDIT_REQUEST,
       });
 
-      const result = await getCredit(id, config);
+      const result = await getUserCredit(id, config);
       const credit = isEmpty(result[0]) ? defaultZeroBalanceCredit : result[0];
 
       dispatch({

@@ -32,6 +32,6 @@ Object {
       "659f6cb5-d286-4635-a5dd-62e74a26d4c9",
     ],
   },
-  "type": "@farfetch/blackout-client/FETCH_CONTACTS_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_CONTACTS_SUCCESS",
 }
 `;

@@ -1,10 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetTitles,
+  GetTitlesQuery,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import titlesSchema from '../../../entities/schemas/titles';
 import type { Dispatch } from 'redux';
-import type { GetTitles } from '@farfetch/blackout-client/users/titles/types';
-import type { GetTitlesQuery } from '@farfetch/blackout-client/users/types';
 
 /**
  * @param query  - Query parameters for get titles.

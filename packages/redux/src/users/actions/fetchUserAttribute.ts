@@ -1,5 +1,5 @@
 import { fetchUserAttributeFactory } from './factories';
-import { getUserAttribute } from '@farfetch/blackout-client/users';
+import { getUserAttribute } from '@farfetch/blackout-client';
 
 /**
  * Fetch all user attribute with given id.

@@ -1,9 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserPreferences,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import userPreferencesSchema from '../../../entities/schemas/preference';
 import type { Dispatch } from 'redux';
-import type { GetUserPreferences } from '@farfetch/blackout-client/users/preferences/types';
 
 /**
  * @param userId - User's id to.

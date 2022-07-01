@@ -1,4 +1,4 @@
-import { putUserPreferences } from '@farfetch/blackout-client/users';
+import { putUserPreferences } from '@farfetch/blackout-client';
 import { setPreferencesFactory } from './factories';
 
 /**

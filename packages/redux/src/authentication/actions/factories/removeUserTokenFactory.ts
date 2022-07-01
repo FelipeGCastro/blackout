@@ -20,7 +20,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (deleteTokens: DeleteTokens) =>
+const removeUserImpersonationFactory =
+  (deleteTokens: DeleteTokens) =>
   (userTokenId: number, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -44,3 +45,5 @@ export default (deleteTokens: DeleteTokens) =>
       throw error;
     }
   };
+
+export default removeUserImpersonationFactory;

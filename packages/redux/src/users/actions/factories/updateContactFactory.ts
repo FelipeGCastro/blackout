@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   PatchUserContact,
-  PatchUserContactData,
-} from '@farfetch/blackout-client/users/contacts/types';
+  PatchUserContactOperation,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * Updates a user contact.
@@ -19,8 +20,8 @@ const updateContactFactory =
   (
     id: number,
     contactId: string,
-    data: PatchUserContactData,
-    config?: Record<string, unknown>,
+    data: PatchUserContactOperation[],
+    config?: Config,
   ) =>
   async (dispatch: Dispatch) => {
     try {

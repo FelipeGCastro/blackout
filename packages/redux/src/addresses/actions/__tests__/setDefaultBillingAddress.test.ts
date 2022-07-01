@@ -1,4 +1,4 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import {
   addressId2,
   mockUpdateAddressResponse,
@@ -6,13 +6,13 @@ import {
 } from 'tests/__fixtures__/addresses';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { putDefaultBillingAddress } from '@farfetch/blackout-client/addresses';
+import { putUserDefaultBillingAddress } from '@farfetch/blackout-client';
 import { setDefaultBillingAddress } from '..';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  putDefaultBillingAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  putUserDefaultBillingAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -30,15 +30,15 @@ describe('setDefaultBillingAddress() action creator', () => {
   it('should create the correct actions for when the set billing address procedure fails', async () => {
     const expectedError = new Error('set default billing address error');
 
-    putDefaultBillingAddress.mockRejectedValueOnce(expectedError);
+    putUserDefaultBillingAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(setDefaultBillingAddress(userId, addressId2));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(putDefaultBillingAddress).toHaveBeenCalledTimes(1);
-      expect(putDefaultBillingAddress).toHaveBeenCalledWith(
+      expect(putUserDefaultBillingAddress).toHaveBeenCalledTimes(1);
+      expect(putUserDefaultBillingAddress).toHaveBeenCalledWith(
         { userId, id: addressId2 },
         expectedConfig,
       );
@@ -59,14 +59,16 @@ describe('setDefaultBillingAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the set billing address procedure is successful', async () => {
-    putDefaultBillingAddress.mockResolvedValueOnce(mockUpdateAddressResponse);
+    putUserDefaultBillingAddress.mockResolvedValueOnce(
+      mockUpdateAddressResponse,
+    );
     await store.dispatch(setDefaultBillingAddress(userId, addressId2));
 
     const actionResults = store.getActions();
 
     expect.assertions(4);
-    expect(putDefaultBillingAddress).toHaveBeenCalledTimes(1);
-    expect(putDefaultBillingAddress).toHaveBeenCalledWith(
+    expect(putUserDefaultBillingAddress).toHaveBeenCalledTimes(1);
+    expect(putUserDefaultBillingAddress).toHaveBeenCalledWith(
       { userId, id: addressId2 },
       expectedConfig,
     );
@@ -82,6 +84,6 @@ describe('setDefaultBillingAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.SET_DEFAULT_BILLING_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('set default billing address success payload');
+    ).toMatchSnapshot('set user default billing address success payload');
   });
 });

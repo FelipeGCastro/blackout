@@ -71,7 +71,11 @@ const isLoading = (
 export const entitiesMapper = {
   [actionTypes.RESET_PRODUCT_DETAILS_ENTITIES as typeof actionTypes.RESET_PRODUCT_DETAILS_ENTITIES]:
     (state: StoreState['entities']): StoreState['entities'] => {
-      const { products, sets, ...rest } = state;
+      if (!state) {
+        return state;
+      }
+
+      const { products, ...rest } = state;
 
       return rest;
     },

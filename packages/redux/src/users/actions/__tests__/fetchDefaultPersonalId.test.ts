@@ -1,13 +1,13 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { fetchDefaultPersonalId } from '../';
-import { getUserDefaultPersonalId } from '@farfetch/blackout-client/users';
+import { getUserDefaultPersonalId } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockGetUserDefaultPersonalIdResponse } from 'tests/__fixtures__/users';
 import { mockStore } from '../../../../tests';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   getUserDefaultPersonalId: jest.fn(),
 }));
 

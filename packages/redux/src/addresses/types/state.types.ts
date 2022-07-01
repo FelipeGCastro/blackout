@@ -1,9 +1,9 @@
 import type {
-  Address,
+  BlackoutError,
   Prediction,
   PredictionDetails,
-} from '@farfetch/blackout-client/addresses/types';
-import type { BlackoutError } from '@farfetch/blackout-client';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { CombinedState } from 'redux';
 import type {
   Nullable,
@@ -13,11 +13,11 @@ import type {
 } from '../../types';
 
 export type AddressState = CombinedState<{
-  error: Record<Address['id'], BlackoutError | null>;
-  isLoading: Record<Address['id'], boolean>;
+  error: Record<UserAddress['id'], BlackoutError | null>;
+  isLoading: Record<UserAddress['id'], boolean>;
 }>;
 
-export type State = CombinedState<{
+export type AddressesState = CombinedState<{
   error: Nullable<BlackoutError>;
   isLoading: boolean;
   result: string[] | null;
@@ -26,5 +26,5 @@ export type State = CombinedState<{
   addresses: StateWithoutResult;
   address: AddressState;
   addressSchema: StateWithoutResult;
-  defaultAddressDetails: StateWithResult<Address>;
+  defaultAddressDetails: StateWithResult<UserAddress>;
 }>;

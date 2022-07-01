@@ -1,5 +1,5 @@
+import * as actionTypes from '../../actionTypes';
 import * as normalizr from 'normalizr';
-import { actionTypes } from '../..';
 import {
   addressId2,
   expectedGetAddressNormalizedPayload,
@@ -7,14 +7,14 @@ import {
   userId,
 } from 'tests/__fixtures__/addresses';
 import { fetchAddress } from '..';
-import { getAddress } from '@farfetch/blackout-client/addresses';
+import { getUserAddress } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  getAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  getUserAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -33,15 +33,15 @@ describe('fetchAddress() action creator', () => {
   it('should create the correct actions for when the get address details procedure fails', async () => {
     const expectedError = new Error('get address details error');
 
-    getAddress.mockRejectedValueOnce(expectedError);
+    getUserAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(fetchAddress(userId, addressId2));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(getAddress).toHaveBeenCalledTimes(1);
-      expect(getAddress).toHaveBeenCalledWith(
+      expect(getUserAddress).toHaveBeenCalledTimes(1);
+      expect(getUserAddress).toHaveBeenCalledWith(
         { id: addressId2, userId },
         expectedConfig,
       );
@@ -62,15 +62,15 @@ describe('fetchAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the get address details procedure is successful', async () => {
-    getAddress.mockResolvedValueOnce(mockGetAddressResponse);
+    getUserAddress.mockResolvedValueOnce(mockGetAddressResponse);
     await store.dispatch(fetchAddress(userId, addressId2));
 
     const actionResults = store.getActions();
 
     expect.assertions(5);
     expect(normalizeSpy).toHaveBeenCalledTimes(1);
-    expect(getAddress).toHaveBeenCalledTimes(1);
-    expect(getAddress).toHaveBeenCalledWith(
+    expect(getUserAddress).toHaveBeenCalledTimes(1);
+    expect(getUserAddress).toHaveBeenCalledWith(
       { id: addressId2, userId },
       expectedConfig,
     );
@@ -87,6 +87,6 @@ describe('fetchAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.FETCH_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('get address details success payload');
+    ).toMatchSnapshot('get user address details success payload');
   });
 });

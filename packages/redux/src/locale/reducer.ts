@@ -8,10 +8,10 @@ import type {
   ActionFetchCountryCurrencies,
   ActionFetchCountryStates,
   ActionSetCountryCode,
-  State,
+  LocaleState,
 } from './types';
 
-export const INITIAL_STATE_LOCALE: State = {
+export const INITIAL_STATE_LOCALE: LocaleState = {
   countryCode: null,
   sourceCountryCode: null,
   cities: {
@@ -35,7 +35,7 @@ export const INITIAL_STATE_LOCALE: State = {
 const countryCode = (
   state = INITIAL_STATE_LOCALE.countryCode,
   action: ActionSetCountryCode,
-): State['countryCode'] => {
+): LocaleState['countryCode'] => {
   switch (action.type) {
     case actionTypes.SET_COUNTRY_CODE:
       return get(
@@ -51,7 +51,7 @@ const countryCode = (
 const cities = (
   state = INITIAL_STATE_LOCALE.cities,
   action: ActionFetchCountryCities,
-): State['cities'] => {
+): LocaleState['cities'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_CITIES_REQUEST:
       return {
@@ -76,7 +76,7 @@ const cities = (
 const countries = (
   state = INITIAL_STATE_LOCALE.countries,
   action: ActionFetchCountries | ActionFetchCountry,
-): State['countries'] => {
+): LocaleState['countries'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_REQUEST:
     case actionTypes.FETCH_COUNTRIES_REQUEST:
@@ -104,7 +104,7 @@ const countries = (
 const currencies = (
   state = INITIAL_STATE_LOCALE.currencies,
   action: ActionFetchCountryCurrencies,
-): State['currencies'] => {
+): LocaleState['currencies'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_CURRENCIES_REQUEST:
       return {
@@ -129,7 +129,7 @@ const currencies = (
 const states = (
   state = INITIAL_STATE_LOCALE.states,
   action: ActionFetchCountryStates,
-): State['states'] => {
+): LocaleState['states'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_STATES_REQUEST:
       return {
@@ -151,32 +151,43 @@ const states = (
   }
 };
 
+const sourceCountryCode = (state = INITIAL_STATE_LOCALE.sourceCountryCode) => {
+  // No action changes this value in state.
+  // sourceCountryCode is only available from the server
+  // initial state (see serverInitialState.ts in locale for more details)
+  return state;
+};
+
 export const getAreCountryCitiesLoading = (
-  state: State,
-): State['cities']['isLoading'] => state.cities.isLoading;
+  state: LocaleState,
+): LocaleState['cities']['isLoading'] => state.cities.isLoading;
 export const getAreCountriesLoading = (
-  state: State,
-): State['countries']['isLoading'] => state.countries.isLoading;
+  state: LocaleState,
+): LocaleState['countries']['isLoading'] => state.countries.isLoading;
 export const getAreCountryCurrenciesLoading = (
-  state: State,
-): State['currencies']['isLoading'] => state.currencies.isLoading;
+  state: LocaleState,
+): LocaleState['currencies']['isLoading'] => state.currencies.isLoading;
 export const getAreCountryStatesLoading = (
-  state: State,
-): State['states']['isLoading'] => state.states.isLoading;
-export const getCountryCitiesError = (state: State): State['cities']['error'] =>
-  state.cities.error;
-export const getCountriesError = (state: State): State['countries']['error'] =>
-  state.countries.error;
-export const getCountryCode = (state: State): State['countryCode'] =>
-  state.countryCode;
+  state: LocaleState,
+): LocaleState['states']['isLoading'] => state.states.isLoading;
+export const getCountryCitiesError = (
+  state: LocaleState,
+): LocaleState['cities']['error'] => state.cities.error;
+export const getCountriesError = (
+  state: LocaleState,
+): LocaleState['countries']['error'] => state.countries.error;
+export const getCountryCode = (
+  state: LocaleState,
+): LocaleState['countryCode'] => state.countryCode;
 export const getSourceCountryCode = (
-  state: State,
-): State['sourceCountryCode'] => state.sourceCountryCode;
+  state: LocaleState,
+): LocaleState['sourceCountryCode'] => state.sourceCountryCode;
 export const getCountryCurrenciesError = (
-  state: State,
-): State['currencies']['error'] => state.currencies.error;
-export const getCountryStatesError = (state: State): State['states']['error'] =>
-  state.states.error;
+  state: LocaleState,
+): LocaleState['currencies']['error'] => state.currencies.error;
+export const getCountryStatesError = (
+  state: LocaleState,
+): LocaleState['states']['error'] => state.states.error;
 
 const reducers = combineReducers({
   cities,
@@ -184,6 +195,7 @@ const reducers = combineReducers({
   countryCode,
   currencies,
   states,
+  sourceCountryCode,
 });
 
 /**
@@ -194,10 +206,16 @@ const reducers = combineReducers({
  *
  * @returns New state.
  */
-export default (state: State, action: AnyAction): State => {
+
+const localeReducer = (
+  state: LocaleState | undefined,
+  action: AnyAction,
+): LocaleState => {
   if (action.type === actionTypes.RESET_LOCALE_STATE) {
-    return reducers(INITIAL_STATE_LOCALE, action);
+    return reducers(undefined, action);
   }
 
   return reducers(state, action);
 };
+
+export default localeReducer;

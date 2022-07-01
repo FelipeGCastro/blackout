@@ -1,20 +1,15 @@
-import type { BlackoutError } from '@farfetch/blackout-client';
+import type {
+  BlackoutError,
+  UserAttributesResponse,
+} from '@farfetch/blackout-client';
 import type { CombinedState } from 'redux';
-import type { Nullable } from '../../types';
-import type { UserAttributesResponse } from '@farfetch/blackout-client/users/types';
+import type {
+  Nullable,
+  StateWithoutResult,
+  StateWithResult,
+} from '../../types';
 
-export interface StateWithoutResult {
-  error: Nullable<BlackoutError>;
-  isLoading: boolean;
-}
-
-export interface StateWithResult {
-  error: Nullable<BlackoutError>;
-  isLoading: boolean;
-  result: UserAttributesResponse[] | null;
-}
-
-export type State = CombinedState<{
+export type UsersState = CombinedState<{
   error: Nullable<BlackoutError>;
   isLoading: boolean;
   result: any;
@@ -25,5 +20,5 @@ export type State = CombinedState<{
   credit: StateWithoutResult;
   creditMovements: StateWithoutResult;
   contacts: StateWithoutResult;
-  userAttributes: StateWithResult;
+  userAttributes: StateWithResult<UserAttributesResponse[] | null>;
 }>;

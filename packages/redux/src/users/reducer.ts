@@ -1,7 +1,7 @@
 import * as actionTypes from './actionTypes';
-import { combineReducers } from 'redux';
+import { AnyAction, combineReducers } from 'redux';
 import { LOGOUT_SUCCESS } from '../authentication/actionTypes';
-import { reducerFactory } from '../helpers';
+import reducerFactory from '../helpers/reducerFactory';
 import type {
   ActionType,
   CreateGuestUserAction,
@@ -35,7 +35,6 @@ import type {
   SetUserAttributeAction,
   SetUserAttributeFailureAction,
   SetUserAttributeRequestAction,
-  State,
   UpdateUserAction,
   UpdateUserAttributeAction,
   UpdateUserAttributeFailureAction,
@@ -43,10 +42,11 @@ import type {
   UpdateUserFailureAction,
   UpdateUserRequestAction,
   UpdateUserSuccessAction,
+  UsersState,
 } from './types';
 import type { StoreState } from '../types';
 
-export const INITIAL_STATE: State = {
+export const INITIAL_STATE: UsersState = {
   error: null,
   result: null,
   isLoading: false,
@@ -87,14 +87,14 @@ export const INITIAL_STATE: State = {
 
 export const entitiesMapper = {
   [actionTypes.RESET_USER_ENTITIES]: (state: StoreState['entities']) => {
-    const { user, ...rest } = state;
+    const { user, ...rest } = state as NonNullable<StoreState['entities']>;
     return {
       ...rest,
     };
   },
   [actionTypes.FETCH_BENEFITS_SUCCESS]: (
     state: StoreState['entities'],
-    action: any,
+    action: AnyAction,
   ): StoreState['entities'] => {
     const { benefits } = action.payload.entities;
     // Add benefits reference to user entity
@@ -108,7 +108,7 @@ export const entitiesMapper = {
   },
   [actionTypes.FETCH_PREFERENCES_SUCCESS]: (
     state: StoreState['entities'],
-    action: any,
+    action: AnyAction,
   ): StoreState['entities'] => {
     const { preferences } = action.payload.entities;
     // Add preferences reference to user entity
@@ -122,7 +122,7 @@ export const entitiesMapper = {
   },
   [actionTypes.FETCH_CREDIT_SUCCESS]: (
     state: StoreState['entities'],
-    action: any,
+    action: AnyAction,
   ): StoreState['entities'] => {
     const { credit } = action.payload;
     // Add credit to user entity
@@ -135,7 +135,7 @@ export const entitiesMapper = {
   },
   [actionTypes.FETCH_CREDIT_MOVEMENTS_SUCCESS]: (
     state: StoreState['entities'],
-    action: any,
+    action: AnyAction,
   ): StoreState['entities'] => {
     const { creditMovements } = action.payload;
     // Add movements to user entity
@@ -148,7 +148,7 @@ export const entitiesMapper = {
   },
   [actionTypes.FETCH_CONTACTS_SUCCESS]: (
     state: StoreState['entities'],
-    action: any,
+    action: AnyAction,
   ): StoreState['entities'] => {
     const { contacts } = action.payload.entities;
     // Add contacts reference to user entity
@@ -162,7 +162,7 @@ export const entitiesMapper = {
   },
   [actionTypes.UPDATE_PREFERENCES_SUCCESS]: (
     state: StoreState['entities'],
-    action: any,
+    action: AnyAction,
   ): StoreState['entities'] => {
     const { preferences } = action.payload.entities;
     // Add preferences reference to user entity
@@ -174,19 +174,9 @@ export const entitiesMapper = {
       preferences,
     };
   },
-  [LOGOUT_SUCCESS]: (state: State) => {
-    const {
-      result,
-      benefits,
-      preferences,
-      updatePreferences,
-      titles,
-      credit,
-      creditMovements,
-      contacts,
-      userAttributes,
-      ...rest
-    } = state;
+  [LOGOUT_SUCCESS]: (state: StoreState['entities']) => {
+    const { benefits, preferences, titles, user, contacts, ...rest } =
+      state as NonNullable<StoreState['entities']>;
 
     return { ...rest };
   },
@@ -221,7 +211,7 @@ const error = (
     | FetchGuestUserRequestAction
     | ResetUserAction
     | LogoutAction,
-): State['error'] => {
+): UsersState['error'] => {
   switch (action.type) {
     case actionTypes.FETCH_USER_FAILURE:
     case actionTypes.UPDATE_USER_FAILURE:
@@ -372,7 +362,7 @@ export const contacts = reducerFactory(
 export const userAttributes = (
   state = INITIAL_STATE.userAttributes,
   action: FetchUserAttributesSuccessAction | FetchUserAttributeSuccessAction,
-): State['userAttributes'] => {
+): UsersState['userAttributes'] => {
   switch (action.type) {
     case actionTypes.FETCH_USER_ATTRIBUTES_SUCCESS:
       return {
@@ -405,23 +395,30 @@ export const userAttributes = (
   }
 };
 
-export const getError = (state: State): State['error'] => state.error;
-export const getResult = (state: State): State['result'] => state.result;
-export const getIsLoading = (state: State): State['isLoading'] =>
+export const getError = (state: UsersState): UsersState['error'] => state.error;
+export const getResult = (state: UsersState): UsersState['result'] =>
+  state.result;
+export const getIsLoading = (state: UsersState): UsersState['isLoading'] =>
   state.isLoading;
-export const getBenefits = (state: State): State['benefits'] => state.benefits;
-export const getPreferences = (state: State): State['preferences'] =>
+export const getBenefits = (state: UsersState): UsersState['benefits'] =>
+  state.benefits;
+export const getPreferences = (state: UsersState): UsersState['preferences'] =>
   state.preferences;
 export const getUpdatePreferences = (
-  state: State,
-): State['updatePreferences'] => state.updatePreferences;
-export const getTitles = (state: State): State['titles'] => state.titles;
-export const getCredit = (state: State): State['credit'] => state.credit;
-export const getCreditMovements = (state: State): State['creditMovements'] =>
-  state.creditMovements;
-export const getContacts = (state: State): State['contacts'] => state.contacts;
-export const getUserAttributes = (state: State): State['userAttributes'] =>
-  state.userAttributes;
+  state: UsersState,
+): UsersState['updatePreferences'] => state.updatePreferences;
+export const getTitles = (state: UsersState): UsersState['titles'] =>
+  state.titles;
+export const getCredit = (state: UsersState): UsersState['credit'] =>
+  state.credit;
+export const getCreditMovements = (
+  state: UsersState,
+): UsersState['creditMovements'] => state.creditMovements;
+export const getContacts = (state: UsersState): UsersState['contacts'] =>
+  state.contacts;
+export const getUserAttributes = (
+  state: UsersState,
+): UsersState['userAttributes'] => state.userAttributes;
 
 const reducer = combineReducers({
   benefits,
@@ -446,7 +443,10 @@ const reducer = combineReducers({
  * @returns New state.
  */
 
-const usersReducer = (state: State | undefined, action: ActionType): State => {
+const usersReducer = (
+  state: UsersState | undefined,
+  action: ActionType,
+): UsersState => {
   if (
     action.type === LOGOUT_SUCCESS ||
     action.type === actionTypes.RESET_USER_STATE

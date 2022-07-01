@@ -21,7 +21,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postPasswordReset: PostPasswordReset) =>
+const resetPasswordFactory =
+  (postPasswordReset: PostPasswordReset) =>
   (data: PostPasswordResetData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -44,3 +45,5 @@ export default (postPasswordReset: PostPasswordReset) =>
       throw error;
     }
   };
+
+export default resetPasswordFactory;

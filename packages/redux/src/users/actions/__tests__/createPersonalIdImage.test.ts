@@ -1,13 +1,13 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { createPersonalIdImage } from '../';
 import { INITIAL_STATE } from '../../reducer';
 import { mockPersonalIdResponse } from 'tests/__fixtures__/users';
 import { mockStore } from '../../../../tests';
-import { postUserPersonalIdImage } from '@farfetch/blackout-client/users';
+import { postUserPersonalIdImage } from '@farfetch/blackout-client';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   postUserPersonalIdImage: jest.fn(),
 }));
 

@@ -23,7 +23,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postRefreshEmailToken: PostRefreshEmailToken) =>
+const refreshEmailTokenFactory =
+  (postRefreshEmailToken: PostRefreshEmailToken) =>
   (data: PostRefreshEmailTokenData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -46,3 +47,5 @@ export default (postRefreshEmailToken: PostRefreshEmailToken) =>
       throw error;
     }
   };
+
+export default refreshEmailTokenFactory;

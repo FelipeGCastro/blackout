@@ -1,5 +1,5 @@
 import { fetchPredictionDetailsFactory } from './factories';
-import { getPredictionDetails } from '@farfetch/blackout-client/addresses';
+import { getPredictionDetails } from '@farfetch/blackout-client';
 
 /**
  * Load Address details based in the prediction id.

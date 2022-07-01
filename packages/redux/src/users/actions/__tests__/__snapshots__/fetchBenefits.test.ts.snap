@@ -20,6 +20,6 @@ Object {
       "00000000-0000-0000-0000-000000000000",
     ],
   },
-  "type": "@farfetch/blackout-client/FETCH_BENEFITS_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_BENEFITS_SUCCESS",
 }
 `;

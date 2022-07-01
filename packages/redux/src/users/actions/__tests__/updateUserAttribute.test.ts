@@ -1,13 +1,13 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { INITIAL_STATE } from '../../reducer';
 import { mockPatchUserAttributeResponse } from 'tests/__fixtures__/users';
 import { mockStore } from '../../../../tests';
-import { patchUserAttribute } from '@farfetch/blackout-client/users';
+import { patchUserAttribute } from '@farfetch/blackout-client';
 import { updateUserAttribute } from '../';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   patchUserAttribute: jest.fn(),
 }));
 

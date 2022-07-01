@@ -1,5 +1,5 @@
 import { createPersonalIdImageFactory } from './factories';
-import { postUserPersonalIdImage } from '@farfetch/blackout-client/users';
+import { postUserPersonalIdImage } from '@farfetch/blackout-client';
 
 /**
  * Create personal id image.

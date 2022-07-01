@@ -1,12 +1,12 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { createPhoneTokenValidations } from '..';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { postPhoneTokenValidations } from '@farfetch/blackout-client/users';
+import { postPhoneTokenValidations } from '@farfetch/blackout-client';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   postPhoneTokenValidations: jest.fn(),
 }));
 

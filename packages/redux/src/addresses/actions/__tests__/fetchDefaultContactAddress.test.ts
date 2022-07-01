@@ -1,14 +1,14 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { fetchDefaultContactAddress } from '..';
-import { getDefaultContactAddress } from '@farfetch/blackout-client/addresses';
+import { getUserDefaultContactAddress } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockGetAddressResponse } from 'tests/__fixtures__/addresses';
 import { mockStore } from '../../../../tests';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  getDefaultContactAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  getUserDefaultContactAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -28,15 +28,15 @@ describe('fetchDefaultContactAddress() action creator', () => {
   it('should create the correct actions for when the get default contact address details procedure fails', async () => {
     const expectedError = new Error('get default contact address error');
 
-    getDefaultContactAddress.mockRejectedValueOnce(expectedError);
+    getUserDefaultContactAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(fetchDefaultContactAddress(userId));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(getDefaultContactAddress).toHaveBeenCalledTimes(1);
-      expect(getDefaultContactAddress).toHaveBeenCalledWith(
+      expect(getUserDefaultContactAddress).toHaveBeenCalledTimes(1);
+      expect(getUserDefaultContactAddress).toHaveBeenCalledWith(
         userId,
         expectedConfig,
       );
@@ -57,14 +57,14 @@ describe('fetchDefaultContactAddress() action creator', () => {
   it('should create the correct actions for when the get address details procedure is successful', async () => {
     const expectedResponse = { ...mockGetAddressResponse };
 
-    getDefaultContactAddress.mockResolvedValueOnce(mockGetAddressResponse);
+    getUserDefaultContactAddress.mockResolvedValueOnce(mockGetAddressResponse);
     await store.dispatch(fetchDefaultContactAddress(userId));
 
     const actionResults = store.getActions();
 
     expect.assertions(4);
-    expect(getDefaultContactAddress).toHaveBeenCalledTimes(1);
-    expect(getDefaultContactAddress).toHaveBeenCalledWith(
+    expect(getUserDefaultContactAddress).toHaveBeenCalledTimes(1);
+    expect(getUserDefaultContactAddress).toHaveBeenCalledWith(
       userId,
       expectedConfig,
     );
@@ -81,6 +81,6 @@ describe('fetchDefaultContactAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.FETCH_DEFAULT_CONTACT_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('get default contact address success payload');
+    ).toMatchSnapshot('get user default contact address success payload');
   });
 });

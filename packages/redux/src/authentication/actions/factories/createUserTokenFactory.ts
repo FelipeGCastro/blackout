@@ -21,7 +21,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postTokens: PostTokens) =>
+const createUserTokenFactory =
+  (postTokens: PostTokens) =>
   (data: PostTokensData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -48,3 +49,5 @@ export default (postTokens: PostTokens) =>
       throw error;
     }
   };
+
+export default createUserTokenFactory;

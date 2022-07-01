@@ -1,13 +1,14 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type { FetchPredictionDetailsAction } from '../../types';
-import type {
+import {
+  Config,
   GetPredictionDetails,
   GetPredictionDetailsProps,
   GetPredictionDetailsQuery,
   PredictionDetails,
-} from '@farfetch/blackout-client/addresses/types';
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
+import type { FetchPredictionDetailsAction } from '../../types';
 
 /**
  * @param props  - Object containing predictionId.

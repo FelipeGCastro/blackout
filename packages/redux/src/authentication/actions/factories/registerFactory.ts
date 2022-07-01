@@ -24,7 +24,8 @@ const UNVERIFIED_USER = 4;
  *
  * @returns Thunk factory.
  */
-export default (postRegister: PostRegister) =>
+const registerFactory =
+  (postRegister: PostRegister) =>
   (data: PostRegisterData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -59,3 +60,5 @@ export default (postRegister: PostRegister) =>
       throw error;
     }
   };
+
+export default registerFactory;

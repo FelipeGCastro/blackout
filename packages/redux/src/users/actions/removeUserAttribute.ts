@@ -1,4 +1,4 @@
-import { deleteUserAttribute } from '@farfetch/blackout-client/users';
+import { deleteUserAttribute } from '@farfetch/blackout-client';
 import { removeUserAttributeFactory } from './factories';
 
 /**

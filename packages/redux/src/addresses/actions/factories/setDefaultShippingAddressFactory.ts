@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type {
-  Address,
-  PutDefaultShippingAddress,
+import {
+  Config,
+  PutUserDefaultShippingAddress,
+  toBlackoutError,
   User,
-} from '@farfetch/blackout-client/addresses/types';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
 import type { SetDefaultShippingAddressAction } from '../../types';
 
@@ -24,8 +25,8 @@ import type { SetDefaultShippingAddressAction } from '../../types';
  * @returns Thunk factory.
  */
 const setDefaultShippingAddressFactory =
-  (putDefaultShippingAddress: PutDefaultShippingAddress) =>
-  (userId: User['id'], addressId: Address['id'], config?: Config) =>
+  (putDefaultShippingAddress: PutUserDefaultShippingAddress) =>
+  (userId: User['id'], addressId: UserAddress['id'], config?: Config) =>
   async (
     dispatch: Dispatch<SetDefaultShippingAddressAction>,
   ): Promise<void> => {

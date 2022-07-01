@@ -1,11 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   PostUserPersonalIdImage,
   PostUserPersonalIdImageData,
   PostUserPersonalIdImageResponse,
-} from '@farfetch/blackout-client/users/personalIds/types';
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * @param userId - User id.

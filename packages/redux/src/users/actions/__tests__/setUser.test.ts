@@ -1,17 +1,16 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import {
   expectedNormalizedUserPayload,
   mockUsersResponse,
 } from 'tests/__fixtures__/users';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { putUser } from '@farfetch/blackout-client/users';
+import { putUser, PutUserData } from '@farfetch/blackout-client';
 import { setUser } from '..';
 import find from 'lodash/find';
-import type { PutUserData } from '@farfetch/blackout-client/users/types';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   putUser: jest.fn(),
 }));
 

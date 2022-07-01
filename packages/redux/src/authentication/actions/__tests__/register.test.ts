@@ -1,3 +1,4 @@
+import * as actionTypes from '../../actionTypes';
 import {
   expectedNormalizedPayload,
   mockResponse,
@@ -7,7 +8,7 @@ import { mockStore } from '../../../../tests';
 import { postRegister, toBlackoutError } from '@farfetch/blackout-client';
 import { register } from '..';
 import find from 'lodash/find';
-import reducer, { actionTypes } from '../..';
+import reducer from '../../reducer';
 
 jest.mock('@farfetch/blackout-client', () => ({
   ...jest.requireActual('@farfetch/blackout-client'),

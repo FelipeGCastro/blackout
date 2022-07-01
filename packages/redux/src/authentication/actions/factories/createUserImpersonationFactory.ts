@@ -21,7 +21,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postUserImpersonation: PostUserImpersonation) =>
+const createUserImpersonationFactory =
+  (postUserImpersonation: PostUserImpersonation) =>
   (data: PostUserImpersonationData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -45,3 +46,5 @@ export default (postUserImpersonation: PostUserImpersonation) =>
       throw error;
     }
   };
+
+export default createUserImpersonationFactory;

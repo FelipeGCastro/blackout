@@ -1,4 +1,4 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import {
   addressId2,
   mockUpdateAddressResponse,
@@ -6,13 +6,13 @@ import {
 } from 'tests/__fixtures__/addresses';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { putDefaultShippingAddress } from '@farfetch/blackout-client/addresses';
+import { putUserDefaultShippingAddress } from '@farfetch/blackout-client';
 import { setDefaultShippingAddress } from '..';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  putDefaultShippingAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  putUserDefaultShippingAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -30,15 +30,15 @@ describe('setDefaultShippingAddress() action creator', () => {
   it('should create the correct actions for when the set shipping address procedure fails', async () => {
     const expectedError = new Error('set default shipping address error');
 
-    putDefaultShippingAddress.mockRejectedValueOnce(expectedError);
+    putUserDefaultShippingAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(setDefaultShippingAddress(userId, addressId2));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(putDefaultShippingAddress).toHaveBeenCalledTimes(1);
-      expect(putDefaultShippingAddress).toHaveBeenCalledWith(
+      expect(putUserDefaultShippingAddress).toHaveBeenCalledTimes(1);
+      expect(putUserDefaultShippingAddress).toHaveBeenCalledWith(
         { userId, id: addressId2 },
         expectedConfig,
       );
@@ -59,14 +59,16 @@ describe('setDefaultShippingAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the set shipping address procedure is successful', async () => {
-    putDefaultShippingAddress.mockResolvedValueOnce(mockUpdateAddressResponse);
+    putUserDefaultShippingAddress.mockResolvedValueOnce(
+      mockUpdateAddressResponse,
+    );
     await store.dispatch(setDefaultShippingAddress(userId, addressId2));
 
     const actionResults = store.getActions();
 
     expect.assertions(4);
-    expect(putDefaultShippingAddress).toHaveBeenCalledTimes(1);
-    expect(putDefaultShippingAddress).toHaveBeenCalledWith(
+    expect(putUserDefaultShippingAddress).toHaveBeenCalledTimes(1);
+    expect(putUserDefaultShippingAddress).toHaveBeenCalledWith(
       { userId, id: addressId2 },
       expectedConfig,
     );
@@ -82,6 +84,6 @@ describe('setDefaultShippingAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.SET_DEFAULT_SHIPPING_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('set default shipping address success payload');
+    ).toMatchSnapshot('set user default shipping address success payload');
   });
 });

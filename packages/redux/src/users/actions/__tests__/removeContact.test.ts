@@ -1,12 +1,12 @@
-import { actionTypes } from '../..';
-import { deleteUserContact } from '@farfetch/blackout-client/users';
+import * as actionTypes from '../../actionTypes';
+import { deleteUserContact } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
 import { removeContact } from '..';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   deleteUserContact: jest.fn(),
 }));
 

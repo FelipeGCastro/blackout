@@ -4,7 +4,7 @@ exports[` 1`] = `
 Object {
   "addresses": Object {
     "@farfetch/blackout-redux/CREATE_ADDRESS_SUCCESS": [Function],
-    "@farfetch/blackout-redux/FETCH_ADDRESS_SCHEMA_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_COUNTRY_ADDRESS_SCHEMAS_SUCCESS": [Function],
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],
     "@farfetch/blackout-redux/REMOVE_ADDRESS_SUCCESS": [Function],
     "@farfetch/blackout-redux/REMOVE_DEFAULT_CONTACT_ADDRESS_SUCCESS": [Function],
@@ -40,17 +40,17 @@ Object {
     "@farfetch/blackout-redux/RESET_MERCHANTS_LOCATIONS_STATE": [Function],
   },
   "orders": Object {
-    "@farfetch/blackout-client/FETCH_ORDERS_SUCCESS": [Function],
-    "@farfetch/blackout-client/FETCH_ORDER_DETAILS_SUCCESS": [Function],
-    "@farfetch/blackout-client/FETCH_ORDER_RETURN_OPTIONS_SUCCESS": [Function],
-    "@farfetch/blackout-client/RESET_ORDERS": [Function],
+    "@farfetch/blackout-redux/FETCH_ORDERS_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_ORDER_DETAILS_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_ORDER_RETURN_OPTIONS_SUCCESS": [Function],
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],
+    "@farfetch/blackout-redux/RESET_ORDERS": [Function],
   },
   "payments": Object {
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],
-    "@farfetch/blackout-redux/REMOVE_INSTRUMENT_SUCCESS": [Function],
+    "@farfetch/blackout-redux/REMOVE_PAYMENT_INTENT_INSTRUMENT_SUCCESS": [Function],
     "@farfetch/blackout-redux/REMOVE_PAYMENT_TOKEN_SUCCESS": [Function],
-    "@farfetch/blackout-redux/RESET_INSTRUMENTS_STATE": [Function],
+    "@farfetch/blackout-redux/RESET_PAYMENT_INSTRUMENTS_STATE": [Function],
   },
   "products": Object {
     "@farfetch/blackout-redux/FETCH_PRODUCT_MEASUREMENTS_SUCCESS": [Function],
@@ -58,22 +58,22 @@ Object {
     "@farfetch/blackout-redux/RESET_PRODUCT_DETAILS_ENTITIES": [Function],
   },
   "returns": Object {
-    "@farfetch/blackout-client/RESET_RETURN": [Function],
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],
+    "@farfetch/blackout-redux/RESET_RETURN": [Function],
   },
   "subscriptions": Object {
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],
     "@farfetch/blackout-redux/RESET_SUBSCRIPTIONS": [Function],
   },
   "users": Object {
-    "@farfetch/blackout-client/FETCH_BENEFITS_SUCCESS": [Function],
-    "@farfetch/blackout-client/FETCH_CONTACTS_SUCCESS": [Function],
-    "@farfetch/blackout-client/FETCH_CREDIT_MOVEMENTS_SUCCESS": [Function],
-    "@farfetch/blackout-client/FETCH_CREDIT_SUCCESS": [Function],
-    "@farfetch/blackout-client/FETCH_PREFERENCES_SUCCESS": [Function],
-    "@farfetch/blackout-client/UPDATE_PREFERENCES_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_BENEFITS_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_CONTACTS_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_CREDIT_MOVEMENTS_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_CREDIT_SUCCESS": [Function],
+    "@farfetch/blackout-redux/FETCH_PREFERENCES_SUCCESS": [Function],
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],
     "@farfetch/blackout-redux/RESET_USER_ENTITIES": [Function],
+    "@farfetch/blackout-redux/UPDATE_PREFERENCES_SUCCESS": [Function],
   },
   "wishlist": Object {
     "@farfetch/blackout-redux/LOGOUT_SUCCESS": [Function],

@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type {
-  Address,
-  PutDefaultContactAddress,
+import {
+  Config,
+  PutUserDefaultContactAddress,
+  toBlackoutError,
   User,
-} from '@farfetch/blackout-client/addresses/types';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
 import type { SetDefaultContactAddressAction } from '../../types';
 
@@ -24,8 +25,8 @@ import type { SetDefaultContactAddressAction } from '../../types';
  * @returns Thunk factory.
  */
 const setDefaultContactAddressFactory =
-  (putDefaultContactAddress: PutDefaultContactAddress) =>
-  (userId: User['id'], addressId: Address['id'], config?: Config) =>
+  (putDefaultContactAddress: PutUserDefaultContactAddress) =>
+  (userId: User['id'], addressId: UserAddress['id'], config?: Config) =>
   async (dispatch: Dispatch<SetDefaultContactAddressAction>): Promise<void> => {
     try {
       dispatch({

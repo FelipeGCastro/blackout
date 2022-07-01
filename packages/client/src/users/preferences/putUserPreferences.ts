@@ -2,7 +2,7 @@ import { adaptError } from '../../helpers/client/formatError';
 import client from '../../helpers/client';
 import join from 'proper-url-join';
 import type { Config } from '../../types';
-import type { PutUserPreferencesData } from './types';
+import type { PutUserPreferences, PutUserPreferencesData } from './types';
 
 /**
  * Method responsible for update user preferences.
@@ -13,7 +13,7 @@ import type { PutUserPreferencesData } from './types';
  *
  * @returns Promise that will resolve when the call to the endpoint finishes.
  */
-export const putUserPreferences = (
+export const putUserPreferences: PutUserPreferences = (
   userId: number,
   data: PutUserPreferencesData,
   config?: Config,

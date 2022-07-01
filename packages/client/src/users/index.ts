@@ -17,3 +17,5 @@ export * from './postPhoneNumberValidations';
 export * from './postPhoneTokens';
 export * from './postPhoneTokenValidations';
 export * from './putUser';
+
+export * from './types';

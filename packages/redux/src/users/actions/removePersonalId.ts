@@ -1,4 +1,4 @@
-import { deleteUserPersonalId } from '@farfetch/blackout-client/users';
+import { deleteUserPersonalId } from '@farfetch/blackout-client';
 import { removePersonalIdFactory } from './factories';
 
 /**

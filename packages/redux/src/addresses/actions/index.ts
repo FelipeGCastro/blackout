@@ -5,7 +5,7 @@
 export { default as createAddress } from './createAddress';
 export { default as fetchAddress } from './fetchAddress';
 export { default as fetchAddresses } from './fetchAddresses';
-export { default as fetchAddressSchema } from './fetchAddressSchema';
+export { default as fetchCountryAddressSchemas } from './fetchCountryAddressSchemas';
 export { default as fetchDefaultContactAddress } from './fetchDefaultContactAddress';
 export { default as fetchPredictionDetails } from './fetchPredictionDetails';
 export { default as fetchPredictions } from './fetchPredictions';

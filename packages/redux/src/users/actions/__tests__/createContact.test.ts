@@ -1,4 +1,4 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import { createContact } from '..';
 import {
   expectedCreateContactNormalized,
@@ -6,11 +6,11 @@ import {
 } from 'tests/__fixtures__/users';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
-import { postUserContact } from '@farfetch/blackout-client/users';
+import { postUserContact } from '@farfetch/blackout-client';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/users', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/users'),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
   postUserContact: jest.fn(),
 }));
 

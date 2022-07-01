@@ -1,16 +1,9 @@
 import type { AxiosResponse } from 'axios';
 import type { Config } from '../../../types';
-import type { UserContactResponse } from '.';
+import type { UserContact } from './userContact.types';
 
 export type DeleteUserContact = (
   userId: number,
-  contactId: string,
+  contactId: UserContact['id'],
   config?: Config,
 ) => Promise<AxiosResponse<void>>;
-
-export type DeleteUserContactFixtureParams = {
-  userId: number;
-  contactId: string;
-  config?: Config;
-  response?: UserContactResponse | Record<string, unknown>;
-};

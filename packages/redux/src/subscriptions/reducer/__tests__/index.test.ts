@@ -5,7 +5,7 @@ import { INITIAL_STATE as subscriptionPackagesInitialState } from '../subscripti
 import { INITIAL_STATE as userSubscriptionInitialState } from '../userSubscriptions';
 import merge from 'lodash/merge';
 import reducer, { entitiesMapper } from '..';
-import type { StoreState } from '@farfetch/blackout-redux/types';
+import type { StoreState } from '../../../types';
 import type { SubscriptionsState } from '../../types';
 
 const INITIAL_STATE: SubscriptionsState = {

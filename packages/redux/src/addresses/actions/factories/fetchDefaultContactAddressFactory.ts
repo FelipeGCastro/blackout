@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type {
-  Address,
-  GetDefaultContactAddress,
+import {
+  Config,
+  GetUserDefaultContactAddress,
+  toBlackoutError,
   User,
-} from '@farfetch/blackout-client/addresses/types';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { Dispatch } from 'redux';
 import type { FetchDefaultContactAddressAction } from '../../types';
 
@@ -18,22 +19,22 @@ import type { FetchDefaultContactAddressAction } from '../../types';
 /**
  * Responsible for obtaining the default contact address of the user.
  *
- * @param getDefaultContactAddress - Get default contact address client.
+ * @param getUserDefaultContactAddress - Get user default contact address client.
  *
  * @returns Thunk factory.
  */
 const fetchDefaultContactAddressFactory =
-  (getDefaultContactAddress: GetDefaultContactAddress) =>
+  (getUserDefaultContactAddress: GetUserDefaultContactAddress) =>
   (userId: User['id'], config?: Config) =>
   async (
     dispatch: Dispatch<FetchDefaultContactAddressAction>,
-  ): Promise<Address> => {
+  ): Promise<UserAddress> => {
     try {
       dispatch({
         type: actionTypes.FETCH_DEFAULT_CONTACT_ADDRESS_REQUEST,
       });
 
-      const result = await getDefaultContactAddress(userId, config);
+      const result = await getUserDefaultContactAddress(userId, config);
 
       dispatch({
         payload: result,

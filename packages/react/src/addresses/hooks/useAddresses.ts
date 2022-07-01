@@ -1,33 +1,48 @@
 /**
  * Hook to provide all kinds of data for the business logic attached to addresses.
  */
-import * as selectors from '@farfetch/blackout-redux/addresses/selectors';
 import {
+  AddressesEntity,
+  areAddressesLoading as areAddressesLoadingSelector,
+  arePredictionDetailsLoading as arePredictionDetailsLoadingSelector,
+  arePredictionsLoading,
+  CountryAddressSchemasEntity,
   createAddress as createAddressAction,
   fetchAddresses,
-  fetchAddressSchema,
+  fetchCountryAddressSchemas as fetchCountryAddressSchemasAction,
   fetchPredictionDetails,
   fetchPredictions,
+  getAddressError,
+  getAddressesError,
+  getAddressesResult,
+  getAddresses as getAddressesSelector,
+  getAddressSchemaError,
+  getAddressSchema as getAddressSchemaSelector,
+  getPredictionDetailsError,
+  getPredictionsError,
+  getPredictions as getPredictionsSelector,
+  isAddressLoading as isAddressLoadingSelector,
+  isAddressSchemaLoading as isAddressSchemaLoadingSelector,
+  Nullable,
   removeAddress,
   resetPredictions as resetPredictionsAction,
   setDefaultBillingAddress as setDefaultBillingAddressAction,
   setDefaultContactAddress as setDefaultContactAddressAction,
   setDefaultShippingAddress as setDefaultShippingAddressAction,
+  StoreState,
   updateAddress as updateAddressAction,
-} from '@farfetch/blackout-redux/addresses';
+} from '@farfetch/blackout-redux';
 import { useAction } from '../../helpers';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type {
-  Address,
+  BlackoutError,
+  CountryAddressSchema,
   Prediction,
   PredictionDetails,
-  Schema,
-} from '@farfetch/blackout-client/addresses/types';
-import type { AddressesEntity } from '@farfetch/blackout-redux/entities/types';
-import type { BlackoutError } from '@farfetch/blackout-client/types';
+  UserAddress,
+} from '@farfetch/blackout-client';
 import type { DeleteAddressHandlerData } from './types';
-import type { Nullable, StoreState } from '@farfetch/blackout-redux/types';
 
 interface Props {
   auto?: boolean;
@@ -55,7 +70,8 @@ interface QueryPredictionDetails {
  * @returns All the handlers, state, actions and relevant data needed to manage address book
  * operations.
  */
-export default ({
+
+const useAddresses = ({
   auto = false,
   userId,
   addressId,
@@ -65,26 +81,26 @@ export default ({
   addressesData: AddressesEntity;
   addressesIds: string[] | null;
   addressesError: Nullable<BlackoutError>;
-  isAddressesLoading: boolean;
-  createAddress: Promise<Address>;
+  areAddressesLoading: boolean;
+  createAddress: Promise<UserAddress>;
   deleteAddress: Promise<void>;
-  getAddresses: Promise<Address[]>;
-  updateAddress: Promise<Address>;
+  getAddresses: Promise<UserAddress[]>;
+  updateAddress: Promise<UserAddress>;
   setDefaultBillingAddress: Promise<void>;
   setDefaultContactAddress: Promise<void>;
   setDefaultShippingAddress: Promise<void>;
   addressError: BlackoutError | null | undefined;
   isAddressLoading: boolean | undefined;
   predictions: Nullable<Prediction[]> | undefined;
-  isPredictionDetailsLoading: boolean;
+  arePredictionDetailsLoading: boolean;
   isPredictionsLoading: boolean;
   predictionsError: Nullable<BlackoutError>;
   predictionDetailsError: Nullable<BlackoutError>;
-  addressSchema: Schema | undefined;
+  addressSchema: CountryAddressSchemasEntity | undefined;
   isAddressSchemaLoading: boolean;
   addressSchemaError: Nullable<BlackoutError>;
   handleDeleteAddress: DeleteAddressHandlerData;
-  handleCreateAddress: (address: { k: string }) => Promise<Address>;
+  handleCreateAddress: (address: { k: string }) => Promise<UserAddress>;
   handleSetDefaultShippingAddress: (addressId: string) => Promise<void>;
   handleSetDefaultBillingAddress: (addressId: string) => Promise<void>;
   handleSetDefaultContactAddress: (addressId: string) => Promise<void>;
@@ -93,8 +109,8 @@ export default ({
     address: {
       k: string;
     },
-  ) => Promise<Address>;
-  handleGetAddress: () => Promise<Address[]>;
+  ) => Promise<UserAddress>;
+  handleGetAddress: () => Promise<UserAddress[]>;
   handleGetPredictions: (
     text: string,
     query?: Query | undefined,
@@ -104,50 +120,50 @@ export default ({
     query?: QueryPredictionDetails | undefined,
   ) => Promise<PredictionDetails>;
   resetPredictions: () => void;
-  handleGetAddressSchema: (isoCode: string) => Promise<Schema>;
+  handleGetAddressSchema: (isoCode: string) => Promise<CountryAddressSchema[]>;
 } => {
   // Selectors
   const addressesData = useSelector((state: StoreState) =>
-    selectors.getAddresses(state),
+    getAddressesSelector(state),
   );
   const addressesIds = useSelector((state: StoreState) =>
-    selectors.getResult(state),
+    getAddressesResult(state),
   );
   const addressesError = useSelector((state: StoreState) =>
-    selectors.getError(state),
+    getAddressesError(state),
   );
-  const isAddressesLoading = useSelector((state: StoreState) =>
-    selectors.isAddressesLoading(state),
+  const areAddressesLoading = useSelector((state: StoreState) =>
+    areAddressesLoadingSelector(state),
   );
   const addressError = useSelector((state: StoreState) =>
-    selectors.getAddressError(state, addressId || ''),
+    getAddressError(state, addressId || ''),
   );
   const isAddressLoading = useSelector((state: StoreState) =>
-    selectors.isAddressLoading(state, addressId || ''),
+    isAddressLoadingSelector(state, addressId || ''),
   );
   const predictions = useSelector((state: StoreState) =>
-    selectors.getPredictions(state),
+    getPredictionsSelector(state),
   );
   const isPredictionsLoading = useSelector((state: StoreState) =>
-    selectors.isPredictionsLoading(state),
+    arePredictionsLoading(state),
   );
   const predictionsError = useSelector((state: StoreState) =>
-    selectors.getPredictionsError(state),
+    getPredictionsError(state),
   );
-  const isPredictionDetailsLoading = useSelector((state: StoreState) =>
-    selectors.isPredictionDetailsLoading(state),
+  const arePredictionDetailsLoading = useSelector((state: StoreState) =>
+    arePredictionDetailsLoadingSelector(state),
   );
   const predictionDetailsError = useSelector((state: StoreState) =>
-    selectors.getPredictionDetailsError(state),
+    getPredictionDetailsError(state),
   );
   const addressSchema = useSelector((state: StoreState) =>
-    selectors.getSchema(state, isoCode || ''),
+    getAddressSchemaSelector(state, isoCode || ''),
   );
   const isAddressSchemaLoading = useSelector((state: StoreState) =>
-    selectors.isAddressSchemaLoading(state),
+    isAddressSchemaLoadingSelector(state),
   );
   const addressSchemaError = useSelector((state: StoreState) =>
-    selectors.getAddressSchemaError(state),
+    getAddressSchemaError(state),
   );
 
   // Actions
@@ -161,7 +177,7 @@ export default ({
   const getPredictions = useAction(fetchPredictions);
   const getPredictionDetails = useAction(fetchPredictionDetails);
   const resetPredictions = useAction(resetPredictionsAction);
-  const getAddressSchema = useAction(fetchAddressSchema);
+  const getCountryAddressSchemas = useAction(fetchCountryAddressSchemasAction);
   /**
    * Deleting status is used to differentiate between different addresses currently
    * being removed Whenever someone clicks the delete button it adds a boolean
@@ -171,7 +187,7 @@ export default ({
 
   useEffect(() => {
     auto && getAddresses(userId);
-  }, [auto, userId]);
+  }, [auto, getAddresses, userId]);
 
   // Gets the address to set as the new default address.
   // By default it is the first one.
@@ -185,7 +201,7 @@ export default ({
       isCurrentBilling?: boolean;
       isCurrentPreferred?: boolean;
     },
-    addressesList: { k: any },
+    addressesList: { k: unknown },
   ): null | string | undefined => {
     const addressesIdsList = Object.keys(addressesList);
     let addressIdToSetDefault = null;
@@ -226,7 +242,7 @@ export default ({
       ) {
         const addressIdToSetDefault = getAddressIdToSetDefault(
           address,
-          addressesData as { k: any },
+          addressesData as { k: unknown },
         );
         if (addressIdToSetDefault) {
           if (address?.isCurrentShipping) {
@@ -260,12 +276,12 @@ export default ({
   const handleUpdateAddress = (
     addressId: string,
     address: { k: string },
-  ): Promise<Address> => updateAddress(userId, addressId, address);
+  ): Promise<UserAddress> => updateAddress(userId, addressId, address);
 
-  const handleCreateAddress = (address: { k: string }): Promise<Address> =>
+  const handleCreateAddress = (address: { k: string }): Promise<UserAddress> =>
     createAddress(userId, address);
 
-  const handleGetAddress = (): Promise<Address[]> => getAddresses(userId);
+  const handleGetAddress = (): Promise<UserAddress[]> => getAddresses(userId);
 
   const handleGetPredictions = (
     text: string,
@@ -278,15 +294,16 @@ export default ({
   ): Promise<PredictionDetails> =>
     getPredictionDetails({ predictionId }, query);
 
-  const handleGetAddressSchema = (isoCode: string): Promise<Schema> =>
-    getAddressSchema(isoCode);
+  const handleGetAddressSchema = (
+    isoCode: string,
+  ): Promise<CountryAddressSchema[]> => getCountryAddressSchemas(isoCode);
 
   return {
     deletingStatus,
     addressesData,
     addressesIds,
     addressesError,
-    isAddressesLoading,
+    areAddressesLoading,
     createAddress,
     deleteAddress,
     getAddresses,
@@ -297,7 +314,7 @@ export default ({
     addressError,
     isAddressLoading,
     predictions,
-    isPredictionDetailsLoading,
+    arePredictionDetailsLoading,
     isPredictionsLoading,
     predictionsError,
     predictionDetailsError,
@@ -317,3 +334,5 @@ export default ({
     handleGetAddressSchema,
   };
 };
+
+export default useAddresses;

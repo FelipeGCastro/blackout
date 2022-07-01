@@ -4,3 +4,5 @@ export * from './getUserAttributes';
 export * from './patchUserAttribute';
 export * from './postUserAttributes';
 export * from './putUserAttribute';
+
+export * from './types';

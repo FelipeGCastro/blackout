@@ -5,7 +5,7 @@
 export { default as createAddressFactory } from './createAddressFactory';
 export { default as fetchAddressFactory } from './fetchAddressFactory';
 export { default as fetchAddressesFactory } from './fetchAddressesFactory';
-export { default as fetchAddressSchemaFactory } from './fetchAddressSchemaFactory';
+export { default as fetchCountryAddressSchemasFactory } from './fetchCountryAddressSchemasFactory';
 export { default as fetchDefaultContactAddressFactory } from './fetchDefaultContactAddressFactory';
 export { default as fetchPredictionDetailsFactory } from './fetchPredictionDetailsFactory';
 export { default as fetchPredictionsFactory } from './fetchPredictionsFactory';

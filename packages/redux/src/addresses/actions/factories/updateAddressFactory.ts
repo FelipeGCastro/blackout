@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  PutUserAddress,
+  toBlackoutError,
+  User,
+  UserAddress,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import addressesSchema from '../../../entities/schemas/addresses';
-import type {
-  Address,
-  PutAddress,
-  User,
-} from '@farfetch/blackout-client/addresses/types';
 import type { Dispatch } from 'redux';
 import type { UpdateAddressAction } from '../../types';
 
@@ -27,14 +28,14 @@ import type { UpdateAddressAction } from '../../types';
  * @returns Thunk factory.
  */
 const updateAddressFactory =
-  (putAddress: PutAddress) =>
+  (putAddress: PutUserAddress) =>
   (
     userId: User['id'],
-    addressId: Address['id'],
-    data: Address,
+    addressId: UserAddress['id'],
+    data: UserAddress,
     config?: Config,
   ) =>
-  async (dispatch: Dispatch<UpdateAddressAction>): Promise<Address> => {
+  async (dispatch: Dispatch<UpdateAddressAction>): Promise<UserAddress> => {
     try {
       dispatch({
         meta: { addressId },

@@ -1,12 +1,14 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  PostUserAddress,
+  toBlackoutError,
+  User,
+  UserAddress,
+  UserAddressInput,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import addressesSchema from '../../../entities/schemas/addresses';
-import type {
-  Address,
-  PostAddress,
-  User,
-} from '@farfetch/blackout-client/addresses/types';
 import type { CreateAddressAction } from '../../types';
 import type { Dispatch } from 'redux';
 
@@ -21,19 +23,19 @@ import type { Dispatch } from 'redux';
 /**
  * Responsible for creating an address for the current user.
  *
- * @param postAddress - PostAddress client.
+ * @param postUserAddress - Post user address client.
  *
  * @returns Thunk factory.
  */
 const createAddressFactory =
-  (postAddress: PostAddress) =>
-  (userId: User['id'], data: Address, config?: Config) =>
-  async (dispatch: Dispatch<CreateAddressAction>): Promise<Address> => {
+  (postUserAddress: PostUserAddress) =>
+  (userId: User['id'], data: UserAddressInput, config?: Config) =>
+  async (dispatch: Dispatch<CreateAddressAction>): Promise<UserAddress> => {
     try {
       dispatch({
         type: actionTypes.CREATE_ADDRESS_REQUEST,
       });
-      const result = await postAddress({ userId }, data, config);
+      const result = await postUserAddress({ userId }, data, config);
 
       dispatch({
         meta: { addressId: result.id },

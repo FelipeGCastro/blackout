@@ -1,19 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   GetUserAttributes,
+  toBlackoutError,
+  UserAttributesQuery,
   UserAttributesResponse,
-} from '@farfetch/blackout-client/users/attributes/types';
-import type { UserAttributesQuery } from '@farfetch/blackout-client/users/types';
-
-/**
- * @param id     - The user's id.
- * @param query  - Query parameters for fetching user attributes.
- * @param config - Custom configurations to send to the client instance (axios).
- *
- * @returns Thunk to be dispatched to the redux store.
- */
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * Get user attributes from user.
@@ -24,7 +17,7 @@ import type { UserAttributesQuery } from '@farfetch/blackout-client/users/types'
  */
 const fetchUserAttributesFactory =
   (getUserAttributes: GetUserAttributes) =>
-  (id: number, query?: UserAttributesQuery, config?: Record<string, unknown>) =>
+  (id: number, query?: UserAttributesQuery, config?: Config) =>
   async (dispatch: Dispatch): Promise<UserAttributesResponse> => {
     try {
       dispatch({

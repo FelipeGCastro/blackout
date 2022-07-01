@@ -21,7 +21,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postValidateEmail: PostValidateEmail) =>
+const validateEmailFactory =
+  (postValidateEmail: PostValidateEmail) =>
   (data: PostValidateEmailData, config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -44,3 +45,5 @@ export default (postValidateEmail: PostValidateEmail) =>
       throw error;
     }
   };
+
+export default validateEmailFactory;

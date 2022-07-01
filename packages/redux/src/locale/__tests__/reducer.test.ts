@@ -1,11 +1,11 @@
-import * as fromReducer from '../reducer';
-import { localeActionTypes as actionTypes, localeReducer as reducer } from '..';
+import * as actionTypes from '../actionTypes';
 import { mockCountryCode } from 'tests/__fixtures__/locale';
-import type { State } from '../types';
+import reducer, * as fromReducer from '../reducer';
+import type { LocaleState } from '../types';
 
 const { INITIAL_STATE_LOCALE } = fromReducer;
 const mockAction = { type: 'foo' };
-let initialState: State;
+let initialState: LocaleState;
 
 describe('locale redux reducer', () => {
   beforeEach(() => {

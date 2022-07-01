@@ -1,19 +1,19 @@
+import * as actionTypes from '../../actionTypes';
 import * as normalizr from 'normalizr';
-import { actionTypes } from '../..';
 import {
   expectedGetAddressesNormalizedPayload,
   mockGetAddressesResponse,
   userId,
 } from 'tests/__fixtures__/addresses';
 import { fetchAddresses } from '..';
-import { getAddresses } from '@farfetch/blackout-client/addresses';
+import { getUserAddresses } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  getAddresses: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  getUserAddresses: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -32,15 +32,15 @@ describe('fetchAddresses() action creator', () => {
   it('should create the correct actions for when the get addresses procedure fails', async () => {
     const expectedError = new Error('get adresses error');
 
-    getAddresses.mockRejectedValueOnce(expectedError);
+    getUserAddresses.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(fetchAddresses(userId));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(getAddresses).toHaveBeenCalledTimes(1);
-      expect(getAddresses).toHaveBeenCalledWith({ userId }, expectedConfig);
+      expect(getUserAddresses).toHaveBeenCalledTimes(1);
+      expect(getUserAddresses).toHaveBeenCalledWith({ userId }, expectedConfig);
       expect(store.getActions()).toEqual(
         expect.arrayContaining([
           { type: actionTypes.FETCH_ADDRESSES_REQUEST },
@@ -54,15 +54,15 @@ describe('fetchAddresses() action creator', () => {
   });
 
   it('should create the correct actions for when the get address book procedure is successful', async () => {
-    getAddresses.mockResolvedValueOnce(mockGetAddressesResponse);
+    getUserAddresses.mockResolvedValueOnce(mockGetAddressesResponse);
     await store.dispatch(fetchAddresses(userId));
 
     const actionResults = store.getActions();
 
     expect.assertions(5);
     expect(normalizeSpy).toHaveBeenCalledTimes(1);
-    expect(getAddresses).toHaveBeenCalledTimes(1);
-    expect(getAddresses).toHaveBeenCalledWith({ userId }, expectedConfig);
+    expect(getUserAddresses).toHaveBeenCalledTimes(1);
+    expect(getUserAddresses).toHaveBeenCalledWith({ userId }, expectedConfig);
     expect(actionResults).toMatchObject([
       { type: actionTypes.FETCH_ADDRESSES_REQUEST },
       {
@@ -74,6 +74,6 @@ describe('fetchAddresses() action creator', () => {
       find(actionResults, {
         type: actionTypes.FETCH_ADDRESSES_SUCCESS,
       }),
-    ).toMatchSnapshot('get addresses success payload');
+    ).toMatchSnapshot('get user addresses success payload');
   });
 });

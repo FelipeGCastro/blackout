@@ -21,6 +21,6 @@ Object {
       "codee1",
     ],
   },
-  "type": "@farfetch/blackout-client/FETCH_PREFERENCES_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_PREFERENCES_SUCCESS",
 }
 `;

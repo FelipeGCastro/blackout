@@ -1,3 +1,4 @@
+import * as actionTypes from '../../actionTypes';
 import { createUserImpersonation } from '..';
 import { mockStore } from '../../../../tests';
 import {
@@ -5,7 +6,7 @@ import {
   toBlackoutError,
 } from '@farfetch/blackout-client';
 import find from 'lodash/find';
-import reducer, { actionTypes } from '../..';
+import reducer from '../../reducer';
 
 jest.mock('@farfetch/blackout-client', () => ({
   ...jest.requireActual('@farfetch/blackout-client'),

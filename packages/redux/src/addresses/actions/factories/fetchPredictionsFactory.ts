@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type { FetchPredictionAction } from '../../types';
-import type {
+import {
+  Config,
   GetPredictions,
   GetPredictionsQuery,
   Prediction,
-} from '@farfetch/blackout-client/addresses/types';
+  toBlackoutError,
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
+import type { FetchPredictionAction } from '../../types';
 
 /**
  * @param text   - Inserted text.

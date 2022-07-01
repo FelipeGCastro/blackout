@@ -9,7 +9,7 @@ Object {
       "value": 0,
     },
   },
-  "type": "@farfetch/blackout-client/FETCH_CREDIT_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_CREDIT_SUCCESS",
 }
 `;
 
@@ -22,6 +22,6 @@ Object {
       "value": 50,
     },
   },
-  "type": "@farfetch/blackout-client/FETCH_CREDIT_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_CREDIT_SUCCESS",
 }
 `;

@@ -91,7 +91,7 @@ describe('createReducerWithResult', () => {
     ACTION_FACTORY_REQUEST: '@farfetch/blackout-redux/ACTION_FACTORY_REQUEST',
     ACTION_FACTORY_SUCCESS: '@farfetch/blackout-redux/ACTION_FACTORY_SUCCESS',
     ACTION_FACTORY_FAILURE: '@farfetch/blackout-redux/ACTION_FACTORY_FAILURE',
-    ACTION_FACTORY_2_RESET: '@farfetch/blackout-client/ACTION_FACTORY_2_RESET',
+    ACTION_FACTORY_2_RESET: '@farfetch/blackout-client',
     ACTION_FACTORY_2_REQUEST:
       '@farfetch/blackout-redux/ACTION_FACTORY_2_REQUEST',
     ACTION_FACTORY_2_SUCCESS:

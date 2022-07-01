@@ -1,3 +1,5 @@
+#!/bin/bash
+
 package='yalc'
 if [ `npm list -g | grep -c $package` -eq 0 ]; then
     npm install -g $package --no-shrinkwrap

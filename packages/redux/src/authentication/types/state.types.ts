@@ -60,7 +60,7 @@ export type Authentication = {
   userImpersonation: userImpersonation;
 };
 
-export type State = Authentication &
+export type AuthenticationState = Authentication &
   CombinedState<{
     error: string | null;
     id: string;

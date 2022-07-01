@@ -16,12 +16,7 @@ import {
 } from './reducer';
 import { getCity, getCountry, getState } from '../entities/selectors';
 import get from 'lodash/get';
-import type {
-  Cities,
-  Currencies,
-  States,
-} from '@farfetch/blackout-client/locale/types';
-import type { State } from './types';
+import type { LocaleState } from './types';
 import type { StoreState } from '../types';
 
 /**
@@ -40,8 +35,8 @@ import type { StoreState } from '../types';
  *
  * @returns - The current country code used on the app.
  */
-export const getCountryCode = (state: StoreState): State['countryCode'] =>
-  getCountryCodeFromReducer(state.locale);
+export const getCountryCode = (state: StoreState) =>
+  getCountryCodeFromReducer(state.locale as LocaleState);
 
 /**
  * Returns the country currency code for the given countryCode. By default, returns
@@ -64,7 +59,7 @@ export const getCountryCode = (state: StoreState): State['countryCode'] =>
 export const getCountryCurrencyCode = (
   state: StoreState,
   countryCode: string | null = getCountryCode(state),
-): string => {
+) => {
   const countryCurrencies = getCountryCurrencies(state, countryCode);
 
   return get(countryCurrencies, '[0].isoCode');
@@ -91,7 +86,7 @@ export const getCountryCurrencyCode = (
 export const getCountryCulture = (
   state: StoreState,
   countryCode: string | null = getCountryCode(state),
-): string => {
+) => {
   const country = countryCode && getCountry(state, countryCode);
 
   return get(country, 'defaultCulture');
@@ -145,7 +140,7 @@ export const getCountryCultures = (
 export const getCountryStructure = (
   state: StoreState,
   countryCode: string | null = getCountryCode(state),
-): string => {
+) => {
   const country = countryCode && getCountry(state, countryCode);
 
   return get(country, 'defaultSubfolder');
@@ -172,7 +167,7 @@ export const getCountryStructure = (
 export const getCountryStructures = (
   state: StoreState,
   countryCode: string | null = getCountryCode(state),
-): string => {
+) => {
   const country = countryCode && getCountry(state, countryCode);
 
   return get(country, 'structures');
@@ -196,7 +191,8 @@ export const getCountryStructures = (
  */
 export const getSourceCountryCode = (
   state: StoreState,
-): State['sourceCountryCode'] => getSourceCountryCodeFromReducer(state.locale);
+): LocaleState['sourceCountryCode'] =>
+  getSourceCountryCodeFromReducer(state.locale as LocaleState);
 
 /**
  * Returns the country cities error.
@@ -214,9 +210,8 @@ export const getSourceCountryCode = (
  *
  * @returns - Cities error.
  */
-export const getCountryCitiesError = (
-  state: StoreState,
-): State['cities']['error'] => getCountryCitiesErrorFromReducer(state.locale);
+export const getCountryCitiesError = (state: StoreState) =>
+  getCountryCitiesErrorFromReducer(state.locale as LocaleState);
 
 /**
  * Returns the loading status for the cities.
@@ -234,8 +229,8 @@ export const getCountryCitiesError = (
  *
  * @returns - Cities Loading status.
  */
-export const areCountryCitiesLoading = (state: StoreState): boolean =>
-  getAreCountryCitiesLoading(state.locale);
+export const areCountryCitiesLoading = (state: StoreState) =>
+  getAreCountryCitiesLoading(state.locale as LocaleState);
 
 /**
  * Returns the countries error.
@@ -253,9 +248,8 @@ export const areCountryCitiesLoading = (state: StoreState): boolean =>
  *
  * @returns - Countries error.
  */
-export const getCountriesError = (
-  state: StoreState,
-): State['countries']['error'] => getCountriesErrorFromReducer(state.locale);
+export const getCountriesError = (state: StoreState) =>
+  getCountriesErrorFromReducer(state.locale as LocaleState);
 
 /**
  * Returns the loading status for the countries.
@@ -273,8 +267,8 @@ export const getCountriesError = (
  *
  * @returns - Countries Loading status.
  */
-export const areCountriesLoading = (state: StoreState): boolean =>
-  getAreCountriesLoading(state.locale);
+export const areCountriesLoading = (state: StoreState) =>
+  getAreCountriesLoading(state.locale as LocaleState);
 
 /**
  * Returns the country currencies error.
@@ -292,10 +286,8 @@ export const areCountriesLoading = (state: StoreState): boolean =>
  *
  * @returns - Currencies error.
  */
-export const getCountryCurrenciesError = (
-  state: StoreState,
-): State['currencies']['error'] =>
-  getCountryCurrenciesErrorFromReducer(state.locale);
+export const getCountryCurrenciesError = (state: StoreState) =>
+  getCountryCurrenciesErrorFromReducer(state.locale as LocaleState);
 
 /**
  * Returns the loading status for the country currencies.
@@ -313,8 +305,8 @@ export const getCountryCurrenciesError = (
  *
  * @returns - Currencies Loading status.
  */
-export const areCountryCurrenciesLoading = (state: StoreState): boolean =>
-  getAreCountryCurrenciesLoading(state.locale);
+export const areCountryCurrenciesLoading = (state: StoreState) =>
+  getAreCountryCurrenciesLoading(state.locale as LocaleState);
 
 /**
  * Returns the country states error.
@@ -332,9 +324,8 @@ export const areCountryCurrenciesLoading = (state: StoreState): boolean =>
  *
  * @returns - States error.
  */
-export const getCountryStatesError = (
-  state: StoreState,
-): State['states']['error'] => getCountryStatesErrorFromReducer(state.locale);
+export const getCountryStatesError = (state: StoreState) =>
+  getCountryStatesErrorFromReducer(state.locale as LocaleState);
 
 /**
  * Returns the loading status for the country states.
@@ -352,8 +343,8 @@ export const getCountryStatesError = (
  *
  * @returns - States Loading status.
  */
-export const areCountryStatesLoading = (state: StoreState): boolean =>
-  getAreCountryStatesLoading(state.locale);
+export const areCountryStatesLoading = (state: StoreState) =>
+  getAreCountryStatesLoading(state.locale as LocaleState);
 
 /**
  * Returns all the country cities.
@@ -372,10 +363,7 @@ export const areCountryStatesLoading = (state: StoreState): boolean =>
  *
  * @returns - All the cities related to the stateId received.
  */
-export const getCountryCities = (
-  state: StoreState,
-  stateId: number,
-): Array<Cities> => {
+export const getCountryCities = (state: StoreState, stateId: number) => {
   const stateEntity = getState(state, stateId);
   const citiesIds = get(stateEntity, 'cities');
 
@@ -403,7 +391,7 @@ export const getCountryCities = (
 export const getCountryCurrencies = (
   state: StoreState,
   countryCode: string | null = getCountryCode(state),
-): Array<Currencies> => {
+) => {
   const country = countryCode && getCountry(state, countryCode);
 
   return get(country, 'currencies');
@@ -430,7 +418,7 @@ export const getCountryCurrencies = (
 export const getCountryStates = (
   state: StoreState,
   countryCode: string | null = getCountryCode(state),
-): Array<States> => {
+) => {
   const country = countryCode && getCountry(state, countryCode);
   const statesIds = get(country, 'states');
 

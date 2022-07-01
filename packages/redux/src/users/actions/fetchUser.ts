@@ -1,5 +1,5 @@
 import { fetchUserFactory } from './factories';
-import { getUser } from '@farfetch/blackout-client/users';
+import { getUser } from '@farfetch/blackout-client';
 
 /**
  * Fetch the user data.

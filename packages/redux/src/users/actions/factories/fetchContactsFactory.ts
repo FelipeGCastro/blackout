@@ -1,9 +1,12 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetUserContacts,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import contactsSchema from '../../../entities/schemas/contact';
 import type { Dispatch } from 'redux';
-import type { GetUserContacts } from '@farfetch/blackout-client/users/contacts/types';
 
 /**
  * Fetch all the contacts from user.

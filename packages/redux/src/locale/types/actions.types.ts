@@ -1,13 +1,12 @@
 import type * as actionTypes from '../actionTypes';
 import type { Action } from 'redux';
-import type { BlackoutError } from '@farfetch/blackout-client';
 import type {
-  Cities,
-  Countries,
+  BlackoutError,
+  City,
   Country,
   Currencies,
-  States,
-} from '@farfetch/blackout-client/locale/types';
+  State,
+} from '@farfetch/blackout-client';
 
 export interface ActionSetCountryCode extends Action {
   type: typeof actionTypes.SET_COUNTRY_CODE;
@@ -23,7 +22,7 @@ export interface ActionFetchCountriesRequest extends Action {
 
 export interface ActionFetchCountriesSuccess extends Action {
   type: typeof actionTypes.FETCH_COUNTRIES_SUCCESS;
-  payload: { result: Countries };
+  payload: { result: Country[] };
 }
 
 export interface ActionFetchCountryFailure extends Action {
@@ -59,7 +58,7 @@ export interface ActionFetchCountryCitiesRequest extends Action {
 
 export interface ActionFetchCountryCitiesSuccess extends Action {
   type: typeof actionTypes.FETCH_COUNTRY_CITIES_SUCCESS;
-  payload: Array<Cities>;
+  payload: City[];
   meta: {
     countryCode: string;
     stateId: number;
@@ -99,7 +98,7 @@ export interface ActionFetchCountryStatesRequest extends Action {
 export interface ActionFetchCountryStatesSuccess extends Action {
   meta: { countryCode: string };
   payload: {
-    result: Array<States>;
+    result: State[];
   };
   type: typeof actionTypes.FETCH_COUNTRY_STATES_SUCCESS;
 }

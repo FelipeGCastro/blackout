@@ -16,7 +16,8 @@ import type { Dispatch } from 'redux';
  *
  * @returns Thunk factory.
  */
-export default (postTokens: PostTokens) =>
+const createClientCredentialsTokenFactory =
+  (postTokens: PostTokens) =>
   (config?: Config) =>
   async (dispatch: Dispatch): Promise<any> => {
     try {
@@ -43,3 +44,5 @@ export default (postTokens: PostTokens) =>
       throw error;
     }
   };
+
+export default createClientCredentialsTokenFactory;

@@ -1,18 +1,18 @@
-import { actionTypes } from '../..';
+import * as actionTypes from '../../actionTypes';
 import {
   addressId2,
   mockUpdateAddressResponse,
   userId,
 } from 'tests/__fixtures__/addresses';
-import { deleteAddress } from '@farfetch/blackout-client/addresses';
+import { deleteUserAddress } from '@farfetch/blackout-client';
 import { INITIAL_STATE } from '../../reducer';
 import { mockStore } from '../../../../tests';
 import { removeAddress } from '..';
 import find from 'lodash/find';
 
-jest.mock('@farfetch/blackout-client/addresses', () => ({
-  ...jest.requireActual('@farfetch/blackout-client/addresses'),
-  deleteAddress: jest.fn(),
+jest.mock('@farfetch/blackout-client', () => ({
+  ...jest.requireActual('@farfetch/blackout-client'),
+  deleteUserAddress: jest.fn(),
 }));
 
 const addressesMockStore = (state = {}) =>
@@ -30,15 +30,15 @@ describe('removeAddress() action creator', () => {
   it('should create the correct actions for when the delete address procedure fails', async () => {
     const expectedError = new Error('delete address error');
 
-    deleteAddress.mockRejectedValueOnce(expectedError);
+    deleteUserAddress.mockRejectedValueOnce(expectedError);
     expect.assertions(4);
 
     try {
       await store.dispatch(removeAddress(userId, addressId2));
     } catch (error) {
       expect(error).toBe(expectedError);
-      expect(deleteAddress).toHaveBeenCalledTimes(1);
-      expect(deleteAddress).toHaveBeenCalledWith(
+      expect(deleteUserAddress).toHaveBeenCalledTimes(1);
+      expect(deleteUserAddress).toHaveBeenCalledWith(
         { userId, id: addressId2 },
         expectedConfig,
       );
@@ -59,14 +59,14 @@ describe('removeAddress() action creator', () => {
   });
 
   it('should create the correct actions for when the delete address procedure is successful', async () => {
-    deleteAddress.mockResolvedValueOnce(mockUpdateAddressResponse);
+    deleteUserAddress.mockResolvedValueOnce(mockUpdateAddressResponse);
     await store.dispatch(removeAddress(userId, addressId2));
 
     const actionResults = store.getActions();
 
     expect.assertions(4);
-    expect(deleteAddress).toHaveBeenCalledTimes(1);
-    expect(deleteAddress).toHaveBeenCalledWith(
+    expect(deleteUserAddress).toHaveBeenCalledTimes(1);
+    expect(deleteUserAddress).toHaveBeenCalledWith(
       { userId, id: addressId2 },
       expectedConfig,
     );
@@ -82,6 +82,6 @@ describe('removeAddress() action creator', () => {
       find(actionResults, {
         type: actionTypes.REMOVE_ADDRESS_SUCCESS,
       }),
-    ).toMatchSnapshot('delete address success payload');
+    ).toMatchSnapshot('delete user address success payload');
   });
 });

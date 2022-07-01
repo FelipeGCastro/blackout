@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
+import {
+  Config,
+  PostUserContact,
+  toBlackoutError,
+  UserContact,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
-import { toBlackoutError } from '@farfetch/blackout-client';
 import contactsSchema from '../../../entities/schemas/contact';
 import type { Dispatch } from 'redux';
-import type {
-  PostUserContact,
-  UserContact,
-} from '@farfetch/blackout-client/users/contacts/types';
 
 /**
  * Creates a user contact.
@@ -17,7 +18,7 @@ import type {
  */
 const createContactFactory =
   (postContact: PostUserContact) =>
-  (id: number, data: UserContact, config?: Record<string, unknown>) =>
+  (id: number, data: UserContact, config?: Config) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({

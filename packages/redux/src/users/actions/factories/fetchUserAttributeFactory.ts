@@ -1,10 +1,11 @@
 import * as actionTypes from '../../actionTypes';
-import { toBlackoutError } from '@farfetch/blackout-client';
-import type { Dispatch } from 'redux';
-import type {
+import {
+  Config,
   GetUserAttribute,
+  toBlackoutError,
   UserAttributesResponse,
-} from '@farfetch/blackout-client/users/attributes/types';
+} from '@farfetch/blackout-client';
+import type { Dispatch } from 'redux';
 
 /**
  * @param id          - The user's id.
@@ -23,7 +24,7 @@ import type {
  */
 const fetchUserAttributeFactory =
   (getUserAttribute: GetUserAttribute) =>
-  (id: number, attributeId: string, config?: Record<string, unknown>) =>
+  (id: number, attributeId: string, config?: Config) =>
   async (dispatch: Dispatch): Promise<UserAttributesResponse> => {
     try {
       dispatch({

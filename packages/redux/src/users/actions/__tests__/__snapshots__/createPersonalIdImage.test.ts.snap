@@ -12,6 +12,6 @@ Object {
     "maskedName": "",
     "verifyLevel": 1,
   },
-  "type": "@farfetch/blackout-client/CREATE_PERSONAL_ID_IMAGE_SUCCESS",
+  "type": "@farfetch/blackout-redux/CREATE_PERSONAL_ID_IMAGE_SUCCESS",
 }
 `;

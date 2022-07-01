@@ -1,8 +1,9 @@
+import * as actionTypes from '../../actionTypes';
 import { deleteTokens, toBlackoutError } from '@farfetch/blackout-client';
 import { mockStore } from '../../../../tests';
 import { removeUserToken } from '..';
 import find from 'lodash/find';
-import reducer, { actionTypes } from '../..';
+import reducer from '../../reducer';
 
 jest.mock('@farfetch/blackout-client', () => ({
   ...jest.requireActual('@farfetch/blackout-client'),

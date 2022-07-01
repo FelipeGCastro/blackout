@@ -8,3 +8,5 @@ export * from './putUserAddress';
 export * from './putUserDefaultBillingAddress';
 export * from './putUserDefaultContactAddress';
 export * from './putUserDefaultShippingAddress';
+
+export * from './types';

@@ -31,6 +31,6 @@ Object {
     },
     "result": 29538482,
   },
-  "type": "@farfetch/blackout-client/FETCH_USER_SUCCESS",
+  "type": "@farfetch/blackout-redux/FETCH_USER_SUCCESS",
 }
 `;

@@ -1,12 +1,13 @@
 import * as actionTypes from '../../actionTypes';
-import { Config, toBlackoutError } from '@farfetch/blackout-client';
+import {
+  Config,
+  GetCountryStates,
+  GetCountryStatesResponse,
+  toBlackoutError,
+} from '@farfetch/blackout-client';
 import { normalize } from 'normalizr';
 import country from '../../../entities/schemas/country';
 import type { Dispatch } from 'redux';
-import type {
-  GetCountryStates,
-  States,
-} from '@farfetch/blackout-client/locale/types';
 
 /**
  * @param countryCode - Country identifier (ISO 3166-1 alpha-2) to find the states related.
@@ -25,7 +26,7 @@ import type {
 const fetchCountryStatesFactory =
   (getCountryStates: GetCountryStates) =>
   (countryCode: string, config?: Config) =>
-  async (dispatch: Dispatch): Promise<States> => {
+  async (dispatch: Dispatch): Promise<GetCountryStatesResponse> => {
     try {
       dispatch({
         meta: { countryCode },

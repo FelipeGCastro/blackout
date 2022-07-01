@@ -1,4 +1,4 @@
-import { putUserDefaultPersonalId } from '@farfetch/blackout-client/users';
+import { putUserDefaultPersonalId } from '@farfetch/blackout-client';
 import { setDefaultPersonalIdFactory } from './factories';
 
 /**

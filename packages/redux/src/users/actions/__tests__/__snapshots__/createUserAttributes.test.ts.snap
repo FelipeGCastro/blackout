@@ -10,6 +10,6 @@ Object {
     "type": "Generic",
     "userId": 0,
   },
-  "type": "@farfetch/blackout-client/CREATE_USER_ATTRIBUTES_SUCCESS",
+  "type": "@farfetch/blackout-redux/CREATE_USER_ATTRIBUTES_SUCCESS",
 }
 `;

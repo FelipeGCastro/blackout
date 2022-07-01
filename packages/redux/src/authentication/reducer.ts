@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 import { CombinedState, combineReducers } from 'redux';
-import { reducerFactory } from '../helpers';
+import reducerFactory from '../helpers/reducerFactory';
 interface Action {
   type: string;
   payload?: {
