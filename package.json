@@ -25,16 +25,18 @@
   },
   "scripts": {
     "clean": "bash scripts/clean.sh",
-    "types": "lerna exec --concurrency 1 --no-bail --stream -- yarn types",
     "lint": "npx eslint . --ext .js,.ts",
     "postinstall": "patch-package",
     "format": "prettier --write '**/*.{js,ts,json,md}'",
     "test": "rimraf coverage && jest",
     "prepare": "husky install",
     "yalc-publish": "scripts/yalc-publish.sh",
-    "yalc-push": "scripts/yalc-push.sh"
+    "yalc-push": "scripts/yalc-push.sh",
+    "transpile": "lerna exec --concurrency 1 --no-bail --stream -- babel --config-file ../../babel.config.js src --out-dir dist --extensions \".ts,.tsx\" --source-maps inline",
+    "typesDeclarations": "lerna exec --concurrency 1 --no-bail --stream -- tsc -b tsconfig.release.json"
   },
   "devDependencies": {
+    "@babel/cli": "^7.18.6",
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-react": "^7.10.4",
     "@babel/preset-typescript": "^7.13.0",

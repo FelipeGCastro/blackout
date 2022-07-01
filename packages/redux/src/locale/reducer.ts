@@ -1,8 +1,8 @@
 import * as actionTypes from './actionTypes';
 import { AnyAction, combineReducers } from 'redux';
-import { reducerFactory } from '../helpers';
 import get from 'lodash/get';
 import produce from 'immer';
+import reducerFactory from '../helpers/reducerFactory';
 import type {
   ActionFetchCountries,
   ActionFetchCountry,
@@ -11,11 +11,11 @@ import type {
   ActionFetchCountryStates,
   ActionSetCountryCode,
   FetchCountryAddressSchemaSuccessAction,
-  State,
+  LocaleState,
 } from './types';
 import type { StoreState } from '../types';
 
-export const INITIAL_STATE_LOCALE: State = {
+export const INITIAL_STATE_LOCALE: LocaleState = {
   countryCode: null,
   sourceCountryCode: null,
   cities: {
@@ -43,7 +43,7 @@ export const INITIAL_STATE_LOCALE: State = {
 const countryCode = (
   state = INITIAL_STATE_LOCALE.countryCode,
   action: ActionSetCountryCode,
-): State['countryCode'] => {
+): LocaleState['countryCode'] => {
   switch (action.type) {
     case actionTypes.SET_COUNTRY_CODE:
       return get(
@@ -59,7 +59,7 @@ const countryCode = (
 const cities = (
   state = INITIAL_STATE_LOCALE.cities,
   action: ActionFetchCountryCities,
-): State['cities'] => {
+): LocaleState['cities'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_CITIES_REQUEST:
       return {
@@ -84,7 +84,7 @@ const cities = (
 const countries = (
   state = INITIAL_STATE_LOCALE.countries,
   action: ActionFetchCountries | ActionFetchCountry,
-): State['countries'] => {
+): LocaleState['countries'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_REQUEST:
     case actionTypes.FETCH_COUNTRIES_REQUEST:
@@ -112,7 +112,7 @@ const countries = (
 const currencies = (
   state = INITIAL_STATE_LOCALE.currencies,
   action: ActionFetchCountryCurrencies,
-): State['currencies'] => {
+): LocaleState['currencies'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_CURRENCIES_REQUEST:
       return {
@@ -137,7 +137,7 @@ const currencies = (
 const states = (
   state = INITIAL_STATE_LOCALE.states,
   action: ActionFetchCountryStates,
-): State['states'] => {
+): LocaleState['states'] => {
   switch (action.type) {
     case actionTypes.FETCH_COUNTRY_STATES_REQUEST:
       return {
@@ -159,11 +159,62 @@ const states = (
   }
 };
 
+const sourceCountryCode = (state = INITIAL_STATE_LOCALE.sourceCountryCode) => {
+  // No action changes this value in state.
+  // sourceCountryCode is only available from the server
+  // initial state (see serverInitialState.ts in locale for more details)
+  return state;
+};
+
 export const addressSchema = reducerFactory(
   'FETCH_COUNTRY_ADDRESS_SCHEMA',
   INITIAL_STATE_LOCALE.addressSchema,
   actionTypes,
 );
+
+export const getAreCountryCitiesLoading = (
+  state: LocaleState,
+): LocaleState['cities']['isLoading'] => state.cities.isLoading;
+export const getAreCountriesLoading = (
+  state: LocaleState,
+): LocaleState['countries']['isLoading'] => state.countries.isLoading;
+export const getAreCountryCurrenciesLoading = (
+  state: LocaleState,
+): LocaleState['currencies']['isLoading'] => state.currencies.isLoading;
+export const getAreCountryStatesLoading = (
+  state: LocaleState,
+): LocaleState['states']['isLoading'] => state.states.isLoading;
+export const getCountryCitiesError = (
+  state: LocaleState,
+): LocaleState['cities']['error'] => state.cities.error;
+export const getCountriesError = (
+  state: LocaleState,
+): LocaleState['countries']['error'] => state.countries.error;
+export const getCountryCode = (
+  state: LocaleState,
+): LocaleState['countryCode'] => state.countryCode;
+export const getSourceCountryCode = (
+  state: LocaleState,
+): LocaleState['sourceCountryCode'] => state.sourceCountryCode;
+export const getCountryCurrenciesError = (
+  state: LocaleState,
+): LocaleState['currencies']['error'] => state.currencies.error;
+export const getCountryStatesError = (
+  state: LocaleState,
+): LocaleState['states']['error'] => state.states.error;
+export const getCountryAddressSchema = (
+  state: LocaleState,
+): LocaleState['addressSchema'] => state.addressSchema;
+
+const reducers = combineReducers({
+  cities,
+  countries,
+  countryCode,
+  currencies,
+  states,
+  sourceCountryCode,
+  addressSchema,
+});
 
 export const entitiesMapper = {
   [actionTypes.FETCH_COUNTRY_ADDRESS_SCHEMA_SUCCESS]: (
@@ -189,44 +240,6 @@ export const entitiesMapper = {
   },
 };
 
-export const getAreCountryCitiesLoading = (
-  state: State,
-): State['cities']['isLoading'] => state.cities.isLoading;
-export const getAreCountriesLoading = (
-  state: State,
-): State['countries']['isLoading'] => state.countries.isLoading;
-export const getAreCountryCurrenciesLoading = (
-  state: State,
-): State['currencies']['isLoading'] => state.currencies.isLoading;
-export const getAreCountryStatesLoading = (
-  state: State,
-): State['states']['isLoading'] => state.states.isLoading;
-export const getCountryCitiesError = (state: State): State['cities']['error'] =>
-  state.cities.error;
-export const getCountriesError = (state: State): State['countries']['error'] =>
-  state.countries.error;
-export const getCountryCode = (state: State): State['countryCode'] =>
-  state.countryCode;
-export const getSourceCountryCode = (
-  state: State,
-): State['sourceCountryCode'] => state.sourceCountryCode;
-export const getCountryCurrenciesError = (
-  state: State,
-): State['currencies']['error'] => state.currencies.error;
-export const getCountryStatesError = (state: State): State['states']['error'] =>
-  state.states.error;
-export const getCountryAddressSchema = (state: State): State['addressSchema'] =>
-  state.addressSchema;
-
-const reducers = combineReducers({
-  cities,
-  countries,
-  countryCode,
-  currencies,
-  states,
-  addressSchema,
-});
-
 /**
  * Reducer for locale state.
  *
@@ -235,10 +248,16 @@ const reducers = combineReducers({
  *
  * @returns New state.
  */
-export default (state: State, action: AnyAction): State => {
+
+const localeReducer = (
+  state: LocaleState | undefined,
+  action: AnyAction,
+): LocaleState => {
   if (action.type === actionTypes.RESET_LOCALE_STATE) {
-    return reducers(INITIAL_STATE_LOCALE, action);
+    return reducers(undefined, action);
   }
 
   return reducers(state, action);
 };
+
+export default localeReducer;

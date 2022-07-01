@@ -208,7 +208,7 @@ describe('locale redux selectors', () => {
     });
   });
 
-  describe('getCountryAddressSchema()', () => {
+  describe('getCountryAddressSchemas()', () => {
     it('should get the address schemas list', () => {
       const expectedResult = mockState.entities.addressSchema;
       const spy = jest.spyOn(fromEntities, 'getEntities');
@@ -235,7 +235,7 @@ describe('locale redux selectors', () => {
     it('should get the address schema isLoading property from state', () => {
       const spy = jest.spyOn(fromLocale, 'getCountryAddressSchema');
 
-      expect(selectors.isCountryAddressSchemaLoading(mockState)).toEqual(false);
+      expect(selectors.areCountryAddressSchemasLoading(mockState)).toEqual(false);
       expect(spy).toHaveBeenCalledTimes(1);
     });
 
