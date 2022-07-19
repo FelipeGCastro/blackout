@@ -1,22 +1,17 @@
 import { cleanup, renderHook } from '@testing-library/react';
-import {
-  mockBagId,
-  mockData,
-  mockInitialState,
-  mockLoadingState,
-  mockState,
-} from 'tests/__fixtures__/bags';
+import { mockBagId, mockBagItemId, mockState } from 'tests/__fixtures__/bags';
+import { mockProductId } from 'tests/__fixtures__/products/ids.fixtures';
 import { mockStore } from '../../../../tests/helpers';
 import { Provider } from 'react-redux';
-import React from 'react';
+import React, { FC, ReactElement } from 'react';
 import useBag from '../useBag';
 
 jest.mock('@farfetch/blackout-redux', () => ({
   ...jest.requireActual('@farfetch/blackout-redux'),
   addBagItem: jest.fn(() => ({ type: 'add-bag-item' })),
+  updateBagItem: jest.fn(() => ({ type: 'update-bag-item' })),
   fetchBag: jest.fn(() => ({ type: 'fetch' })),
   resetBag: jest.fn(() => ({ type: 'reset' })),
-  resetBagState: jest.fn(() => ({ type: 'resetState' })),
 }));
 
 const mockDispatch = jest.fn();
@@ -26,88 +21,208 @@ jest.mock('react-redux', () => ({
   useDispatch: () => mockDispatch,
 }));
 
-const getRenderedHook = (state = mockState) => {
-  const {
-    result: { current },
-  } = renderHook(() => useBag(), {
-    wrapper: props => <Provider store={mockStore(state)} {...props} />,
-  });
-
-  return current;
-};
+const withStore =
+  (state = mockState): FC<{ children: ReactElement }> =>
+  (props): ReactElement => {
+    return <Provider store={mockStore(state)} {...props} />;
+  };
 
 describe('useBag', () => {
   beforeEach(jest.clearAllMocks);
   afterEach(cleanup);
 
   it('should return values correctly with initial state', () => {
-    const current = getRenderedHook();
+    const {
+      result: { current },
+    } = renderHook(() => useBag(), {
+      wrapper: withStore(),
+    });
 
     expect(current).toStrictEqual({
-      bag: expect.any(Object),
-      error: expect.any(Object),
-      addBagItem: expect.any(Function),
-      fetchBag: expect.any(Function),
-      id: expect.any(String),
-      isEmpty: expect.any(Boolean),
-      isLoading: expect.any(Boolean),
-      isWithAnyError: expect.any(Boolean),
-      items: expect.any(Array),
-      itemsCount: expect.any(Number),
-      itemsIds: expect.any(Array),
-      itemsUnavailable: expect.any(Array),
-      resetBag: expect.any(Function),
-      resetBagState: expect.any(Function),
-      totalQuantity: expect.any(Number),
+      error: undefined,
+      isLoading: false,
+      isFetched: true,
+      data: {
+        bagSummary: {
+          currency: 'USD',
+          currencySymbol: '$',
+          dateCreated: '/Date(1534759345364)/',
+          dateUpdated: '/Date(1562573175001)/',
+          formattedGrandTotal: '$381.62',
+          formattedSubTotalAmount: '$371.62',
+          formattedSubTotalAmountExclTaxes: '$371.62',
+          formattedTotalDiscount: '$0',
+          formattedTotalShippingFee: '$10',
+          formattedTotalTaxes: '$0',
+          grandTotal: 381.62,
+          subTotalAmount: 371.62,
+          subTotalAmountExclTaxes: 371.62,
+          taxType: 'DDP',
+          totalDiscount: 0,
+          totalShippingFee: 10,
+          totalTaxes: 0,
+        },
+        count: 7,
+        isEmpty: false,
+        items: expect.any(Array),
+        id: mockBagId,
+      },
+      actions: {
+        fetch: expect.any(Function),
+        reset: expect.any(Function),
+        addItem: expect.any(Function),
+        updateItem: expect.any(Function),
+        removeItem: expect.any(Function),
+      },
     });
   });
 
-  it('should render in loading state', () => {
-    const { isLoading } = getRenderedHook({
-      ...mockState,
-      ...mockLoadingState,
+  it('should render as empty', () => {
+    const {
+      result: {
+        current: {
+          isFetched,
+          data: { isEmpty },
+        },
+      },
+    } = renderHook(() => useBag(), {
+      wrapper: withStore({
+        ...mockState,
+        bag: {
+          ...mockState.bag,
+          result: {
+            ...mockState.bag.result,
+            count: 0,
+            items: [],
+          },
+          items: {
+            ...mockState.bag.items,
+            ids: [],
+          },
+        },
+      }),
+    });
+
+    expect(isEmpty).toBe(true);
+    expect(isFetched).toBe(true);
+  });
+
+  it('should render in loading state due to the loading status', () => {
+    const {
+      result: {
+        current: { isLoading },
+      },
+    } = renderHook(() => useBag(), {
+      wrapper: withStore({
+        ...mockState,
+        bag: {
+          ...mockState.bag,
+          isLoading: true,
+        },
+      }),
     });
 
     expect(isLoading).toBe(true);
   });
 
-  it('should return isEmpty as true if it does not have items', () => {
-    const { isEmpty } = getRenderedHook({ ...mockState, ...mockInitialState });
+  it("should not render in loading state while it doesn't begin fetching", () => {
+    const {
+      result: {
+        current: { isLoading },
+      },
+    } = renderHook(() => useBag(), {
+      wrapper: withStore({
+        ...mockState,
+        bag: {
+          ...mockState.bag,
+          error: undefined,
+          result: {},
+        },
+      }),
+    });
 
-    expect(isEmpty).toBe(true);
+    expect(isLoading).toBe(false);
   });
 
   describe('actions', () => {
-    it('should call `addBagItem` action', () => {
-      const { addBagItem } = getRenderedHook();
+    it('should call `fetch` action if `enableAutoFetch` option is true', () => {
+      const {
+        result: {
+          current: {
+            actions: { fetch },
+          },
+        },
+      } = renderHook(() => useBag({ enableAutoFetch: true }), {
+        wrapper: withStore(),
+      });
 
-      addBagItem(mockData);
-
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'add-bag-item' });
-    });
-
-    it('should call `fetchBag` action', () => {
-      const { fetchBag } = getRenderedHook();
-
-      fetchBag(mockBagId);
+      fetch('123');
 
       expect(mockDispatch).toHaveBeenCalledWith({ type: 'fetch' });
     });
 
-    it('should call `resetBag` action', () => {
-      const { resetBag } = getRenderedHook();
+    it('should not call `fetch` action if `enableAutoFetch` option is false', () => {
+      const {
+        result: {
+          current: {
+            actions: { fetch },
+          },
+        },
+      } = renderHook(() => useBag(), {
+        wrapper: withStore(),
+      });
 
-      resetBag();
+      fetch('123');
 
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'reset' });
+      expect(mockDispatch).not.toHaveBeenCalledWith();
     });
 
-    it('should call `resetBagState` action', () => {
-      const { resetBagState } = getRenderedHook();
+    it('should call `addBagItem` action', () => {
+      const {
+        result: {
+          current: {
+            actions: { addItem },
+          },
+        },
+      } = renderHook(() => useBag(), {
+        wrapper: withStore(),
+      });
 
-      resetBagState(['state']);
+      addItem(mockProductId, { quantity: 1, sizeId: 1 });
 
-      expect(mockDispatch).toHaveBeenCalledWith({ type: 'resetState' });
+      expect(mockDispatch).toHaveBeenCalledWith({ type: 'add-bag-item' });
+    });
+
+    it('should call `updateBagItem` action is product is not on bag', () => {
+      const {
+        result: {
+          current: {
+            actions: { updateItem },
+          },
+        },
+      } = renderHook(() => useBag(), {
+        wrapper: withStore(),
+      });
+
+      updateItem(mockBagItemId, { quantity: 2, sizeId: 2 });
+
+      expect(mockDispatch).toHaveBeenCalledWith({ type: 'add-bag-item' });
+    });
+
+    it('should call `resetBag` action', () => {
+      const {
+        result: {
+          current: {
+            actions: { reset },
+          },
+        },
+      } = renderHook(() => useBag(), {
+        wrapper: withStore(),
+      });
+
+      reset();
+
+      expect(mockDispatch).toHaveBeenCalledWith({ type: 'reset' });
     });
   });
 });

@@ -30,6 +30,7 @@ import type { GetOptionsArgument, Nullable, StoreState } from '../../../types';
  *
  * @returns Thunk factory.
  */
+
 const updateBagItemFactory =
   (patchBagItem: PatchBagItem) =>
   (

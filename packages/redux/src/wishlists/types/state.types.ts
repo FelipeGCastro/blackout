@@ -8,6 +8,8 @@ import type { WishlistItemEntity } from '../../entities/types';
 
 type WishlistNormalized = Omit<Wishlist, 'items'> & {
   items: Array<WishlistItemEntity['id']>;
+  count: number;
+  id: string;
 };
 
 export type WishlistSetsState = CombinedState<{
@@ -24,7 +26,7 @@ export type WishlistsState = CombinedState<{
   error: BlackoutError | null;
   id: Wishlist['id'] | null;
   isLoading: boolean;
-  result: WishlistNormalized | Record<string, never>;
+  result: Partial<WishlistNormalized>;
   items: {
     ids: Array<WishlistItemEntity['id']> | null;
     item: {
